@@ -1,0 +1,9 @@
+<!-- components/base/Form/TFormItem/TFormItem.wxml -->
+<view class="t-form-item t-form-item_{{ style }} t-form-item_placement-{{ labelPlacement }} {{ disabled?'t-form-item_disabled':'' }}">
+  <view class="t-form_label {{ required?'t-form_label-required':'' }}">
+    <text wx:if="{{ label }}">{{ label }}</text>
+  </view>
+  <view class="t-form-content">
+    <slot />
+  </view>
+</view>

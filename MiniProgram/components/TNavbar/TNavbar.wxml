@@ -1,0 +1,15 @@
+<!-- components/base/navbar/navbar.wxml -->
+<t-header-bar frontBackground="{{ frontBackground }}" backBackground="{{ backBackground }}" top="{{ top }}" threshold="{{ threshold }}" defaultOpacity="{{ defaultOpacity }}" reachOpacity="{{ reachOpacity }}" defaultColor="{{ defaultColor }}" reachColor="{{ reachColor }}" fixed="{{ fixed }}" zIndex="{{ zIndex }}" placeholder="{{ placeholder }}" >
+  <view class="navbar" style="grid-template-columns:174rpx auto;">
+    <view class="navbar-left">
+      <view class="navbar-page-route" wx:if="{{ !customLeft }}">
+        <view wx:if="{{ pages.length>1 }}" bindtap="back" class="shoutao st-back"></view>
+        <view wx:if="{{ !isHomePage }}" bindtap="home" class="shoutao st-homefill"></view>
+      </view>
+      <slot name="left" />
+    </view>
+    <view class="navbar-body">
+      <slot />
+    </view>
+  </view>
+</t-header-bar>

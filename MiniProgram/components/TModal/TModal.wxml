@@ -1,0 +1,7 @@
+<!-- components/base/TModal/TModal.wxml -->
+<view class="t-modal {{ inside?'t-model_inside':'' }}" style="position:{{ position }};z-index:{{ zIndex }};display:{{ showModal?'block':'none' }}">
+  <view class="t-modal-body">
+    <slot />
+  </view>
+  <view class="t-modal-mask mask-style" bind:tap="tapMask"></view>
+</view>
