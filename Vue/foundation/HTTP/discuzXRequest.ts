@@ -1,5 +1,5 @@
 import { TMethods } from "./HTTP";
-import Request from "./request";
+import Request from "./Request";
 
 export default class extends Request {
   send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<ResponseData> {
@@ -43,7 +43,7 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  delele<ResponseData>(uri: string | string[]) {
+  delete<ResponseData>(uri: string | string[]) {
     return this.send<ResponseData>(uri, "DELETE");
   }
 }

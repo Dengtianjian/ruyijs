@@ -1,6 +1,6 @@
 import HTTP, { TMethods } from "./HTTP";
 
-export default class extends HTTP {
+export default class Request extends HTTP {
   /**
    * 处理鉴权Token
    * @param headers 响应头

@@ -308,7 +308,7 @@ export default class HTTP {
    * @param uri URI
    * @returns Promise
    */
-  delele<ResponseData>(uri: string | string[]) {
+  delete<ResponseData>(uri: string | string[]) {
     return this.send<ResponseData>(uri, "DELETE");
   }
 }
