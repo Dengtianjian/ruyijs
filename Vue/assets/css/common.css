@@ -1,0 +1,7 @@
+:root {
+  --r-border-radius: 8px;
+
+  --r-panel-padding: 16px;
+  --r-panel-background-color: #fff;
+  --r-panel-border-radius: var(--r-border-radius);
+}
