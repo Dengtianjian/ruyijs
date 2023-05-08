@@ -9,6 +9,14 @@ import { useRouter, useRoute, RouterLinkProps } from 'vue-router';
 import helper from '../../foundation/helper';
 import naiveUI from '../../foundation/naiveUI';
 
+declare module 'vue-router' {
+  interface RouteMeta {
+    menu?: boolean,
+    menuLabel?: string,
+    menuIndex?: number
+  }
+}
+
 const Props = withDefaults(defineProps<{
   options: Array<{
     link?: string | AllowedComponentProps & ComponentCustomProps & VNodeProps & RouterLinkProps,
@@ -27,11 +35,14 @@ let selectedMenu: MenuOption & {
   childrenNames?: string[]
 } = null;
 const DefaultSelectedMenu = ref<string>(Route.name.toString());
+
 Router.beforeResolve((to, from, next) => {
   DefaultSelectedMenu.value = to.name?.toString();
   if (selectedMenu?.childrenNames && selectedMenu.childrenNames.includes(to.name.toString())) {
     DefaultSelectedMenu.value = selectedMenu.key.toString();
   }
+  console.log(to.name.toString());
+  
   next();
 });
 
@@ -62,6 +73,4 @@ function menuValueUpdate(key, item) {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
