@@ -12,13 +12,13 @@ export default class extends HTTP {
         const tokenValue: string = token.slice(0, token.lastIndexOf("/"));
         const tokenExpiration: string = (Number(token.slice(token.lastIndexOf("/") + 1)) * 1000).toString();
 
-        if (!wx.getStorageSync("Ruyi_Token") || wx.getStorageSync("Ruyi_Token") !== tokenValue) {
-          wx.setStorageSync("Ruyi_Token", tokenValue);
+        if (!localStorage.getItem("F_Token") || localStorage.getItem("F_Token") !== tokenValue) {
+          localStorage.setItem("F_Token", tokenValue);
+          localStorage.setItem("F_TokenExpiration", tokenExpiration);
         }
-        wx.setStorageSync("Ruyi_TokenExpiration", tokenExpiration);
       } else {
-        wx.removeStorageSync("Ruyi_Token");
-        wx.removeStorageSync("Ruyi_TokenExpiration");
+        localStorage.removeItem("F_Token");
+        localStorage.removeItem("F_TokenExpiration");
       }
     }
   }
@@ -30,8 +30,8 @@ export default class extends HTTP {
    */
   send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<ResponseData> {
     this.header("X-Ajax", "1");
-    if (wx.getStorageSync("Ruyi_Token")) {
-      this.header("Authorization", `Bearer ${wx.getStorageSync("Ruyi_Token")}`);
+    if (localStorage.getItem("Ruyi_Token")) {
+      this.header("Authorization", `Bearer ${localStorage.getItem("Ruyi_Token")}`);
     }
 
     return super.send<ResponseData>(uri, method).then(res => {
@@ -49,36 +49,17 @@ export default class extends HTTP {
    * @param timeout 请求超时
    * @returns Promise
    */
-  upload<ResponseData>(uri: string | number | (string | number)[] = null, tempFilePath: string, fileName: string = "file", body: Record<string, number | string> = {}, task: (task: WechatMiniprogram.UploadTask) => void = null, timeout: number = null): Promise<ResponseData> {
+  upload<ResponseData>(uri: string | string[] = null, file: File, fileName: string = "file", body: Record<string, string> = {}) {
     this.header("X-Ajax", "1");
 
-    return new Promise((resolve, reject) => {
-      const options: WechatMiniprogram.UploadFileOption = {
-        url: HTTP.genURL(super.getBaseURL, uri, this.getQuery),
-        name: fileName,
-        filePath: tempFilePath,
-        formData: body,
-        header: super.getHeaders,
-        // @ts-ignore
-        success: ({ cookies, data, errMsg, header, statusCode }) => {
-          const requestBody = HTTP.handleResult<ResponseData>(JSON.parse(data), statusCode, header, cookies);
-          if (statusCode > 299) {
-            reject(requestBody);
-          } else {
-            resolve(requestBody.data);
-          }
-        },
-        fail: reject
-      };
-      if (timeout !== null) {
-        options['timeout'] = timeout;
-      }
+    const F: FormData = new FormData();
+    for (const key in body) {
+      F.append(key, body[key]);
+    }
+    F.append("file", file);
+    F.append("fileName", fileName);
 
-      const uploadTask = wx.uploadFile(options);
-      if (task) {
-        task(uploadTask);
-      }
-    });
+    return this.body(F).post<ResponseData>(uri);
   }
   /**
  * 轮询

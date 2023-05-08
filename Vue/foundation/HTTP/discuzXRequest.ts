@@ -1,5 +1,5 @@
 import { TMethods } from "./HTTP";
-import Request from "./Request";
+import Request from "./request";
 
 export default class extends Request {
   send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<ResponseData> {
@@ -8,11 +8,11 @@ export default class extends Request {
 
     return super.send<ResponseData>(null, method);
   }
-  upload<ResponseData>(uri: string | number | (string | number)[] = null, tempFilePath: string, fileName: string = "file", body: Record<string, number | string> = {}, task: (task: WechatMiniprogram.UploadTask) => void = null, timeout: number = null): Promise<ResponseData> {
+  upload<ResponseData>(uri: string | string[] = null, file: File, fileName: string = "file", body: Record<string, string> = {}) {
     uri = Array.isArray(uri) ? uri.join("/") : uri.toString();
     this.query("uri", uri);
 
-    return super.upload(null, tempFilePath, fileName, body, task, timeout);
+    return super.upload<ResponseData>(null, file, fileName, body);
   }
   /**
    * 发送GET请求
