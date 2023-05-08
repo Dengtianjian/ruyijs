@@ -4,16 +4,23 @@
 
 <script lang="ts" setup>
 import { MenuOption, NMenu } from 'naive-ui';
-import { AllowedComponentProps, ComponentCustomProps, computed, ComputedRef, PropType, Ref, ref, RendererElement, RendererNode, VNode, VNodeProps } from 'vue';
+import { AllowedComponentProps, ComponentCustomProps, computed, ComputedRef, PropType, Ref, ref, RendererElement, RendererNode, VNode, VNodeChild, VNodeProps } from 'vue';
 import { useRouter, useRoute, RouterLinkProps } from 'vue-router';
 import helper from '../../foundation/helper';
 import naiveUI from '../../foundation/naiveUI';
 
 declare module 'vue-router' {
   interface RouteMeta {
-    menu?: boolean,
-    menuLabel?: string,
-    menuIndex?: number
+    menu: {
+      index?: number,
+      disabled?: boolean,
+      extra?: string | (() => VNodeChild),
+      icon?: () => VNode,
+      label?: string | (() => VNodeChild),
+      show?: boolean,
+      type?: "group",
+      level?: number
+    }
   }
 }
 
@@ -41,8 +48,6 @@ Router.beforeResolve((to, from, next) => {
   if (selectedMenu?.childrenNames && selectedMenu.childrenNames.includes(to.name.toString())) {
     DefaultSelectedMenu.value = selectedMenu.key.toString();
   }
-  console.log(to.name.toString());
-  
   next();
 });
 

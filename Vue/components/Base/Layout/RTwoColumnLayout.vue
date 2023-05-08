@@ -16,8 +16,8 @@
 import { NLayout, NLayoutSider, NLayoutContent } from 'naive-ui';
 import { AllowedComponentProps, ComponentCustomProps, VNodeProps, VNode, RendererNode, RendererElement } from 'vue';
 import { RouterLinkProps, RouterView } from 'vue-router';
-import CommonFooter from '../CommonFooter.vue';
-import KeepAliveRouterView from '../KeepAliveRouterView.vue';
+import CommonFooter from '../RCommonFooter.vue';
+import KeepAliveRouterView from '../RKeepAliveRouterView.vue';
 
 defineProps<{
   menuOptions: Array<{
