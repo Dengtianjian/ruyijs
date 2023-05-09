@@ -1,5 +1,7 @@
 export type TMethods = | 'OPTIONS' | 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT';
 
+export type TBody = Record<string, any> | BodyInit
+
 type HTTPResponse<ResponseData> = {
   code: number | string,
   message: string,
@@ -45,7 +47,7 @@ export default class HTTP {
   get requestQuery() {
     return this.#query;
   }
-  #body: BodyInit = null;
+  #body: TBody = null;
   /**
    * 获取请求体
    */
@@ -76,7 +78,7 @@ export default class HTTP {
    * @param body 请求体
    * @param pipes 数据管道
    */
-  constructor(baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: BodyInit = null, pipes: string[] = [], options: RequestInit = {}) {
+  constructor(baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}) {
     this.#baseURL = baseURL;
     this.#method = method;
     for (const key in query) {
@@ -130,7 +132,7 @@ export default class HTTP {
    * @param data 请求体数据
    * @returns HTTP
    */
-  body(data: BodyInit) {
+  body(data: TBody) {
     this.#body = data;
     return this;
   }
@@ -220,6 +222,7 @@ export default class HTTP {
       mode: "cors"
     }, this.#options);
     if (method !== "GET") {
+      // @ts-ignore
       options['body'] = this.#body;
     }
 
@@ -248,7 +251,7 @@ export default class HTTP {
           error: response.status > 299
         };
 
-        if (text && header['Content-Type'].includes("application/json")) {
+        if (text && (header['Content-Type']?.includes("application/json") || header['content-type']?.includes("application/json"))) {
           const ResponseBody: HTTPResponse<ResponseData> = JSON.parse(text);
           Response['data'] = ResponseBody.data;
           Response.code = ResponseBody.code;

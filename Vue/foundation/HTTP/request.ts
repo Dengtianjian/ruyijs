@@ -6,19 +6,19 @@ export default class Request extends HTTP {
    * @param headers 响应头
    */
   #tokenHandle(headers: Record<string, string>): void {
-    if (headers['Authorization']) {
-      const token: string = headers['Authorization'];
-      if (token) {
-        const tokenValue: string = token.slice(0, token.lastIndexOf("/"));
-        const tokenExpiration: string = (Number(token.slice(token.lastIndexOf("/") + 1)) * 1000).toString();
+    if (headers['Authorization'] || headers['authorization']) {
+      const Auth: string = headers['Authorization'] || headers['authorization'];
+      if (Auth) {
+        const token: string = Auth.slice(0, Auth.lastIndexOf("/"));
+        const tokenExpiration: string = (Number(Auth.slice(Auth.lastIndexOf("/") + 1)) * 1000).toString();
 
-        if (!localStorage.getItem("F_Token") || localStorage.getItem("F_Token") !== tokenValue) {
-          localStorage.setItem("F_Token", tokenValue);
-          localStorage.setItem("F_TokenExpiration", tokenExpiration);
+        if (!localStorage.getItem("Ruyi_Token") || localStorage.getItem("Ruyi_Token") !== token) {
+          localStorage.setItem("Ruyi_Token", token);
+          localStorage.setItem("Ruyi_TokenExpiration", tokenExpiration);
         }
       } else {
-        localStorage.removeItem("F_Token");
-        localStorage.removeItem("F_TokenExpiration");
+        localStorage.removeItem("Ruyi_Token");
+        localStorage.removeItem("Ruyi_TokenExpiration");
       }
     }
   }
