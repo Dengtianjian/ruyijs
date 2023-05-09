@@ -27,6 +27,15 @@ export interface IResponse<ResponseData> {
   version: string,
 }
 
+export interface IPagination<Data> {
+  pagination: {
+    page: number,
+    perPage: number,
+    total: number
+  }
+  list: Data,
+}
+
 export default class HTTP {
   #baseURL: string = null;
   /**
@@ -229,8 +238,6 @@ export default class HTTP {
       // @ts-ignore
       options['body'] = this.#body;
     }
-    console.log(options);
-    
 
     return new Promise<IResponse<ResponseData>>((resolve, reject) => {
       return fetch(URL, options).then(async res => {
