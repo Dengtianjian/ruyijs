@@ -1,4 +1,4 @@
-import HTTP, { TMethods } from "./HTTP";
+import HTTP, { TMethods } from ".";
 
 export default class Request extends HTTP {
   /**

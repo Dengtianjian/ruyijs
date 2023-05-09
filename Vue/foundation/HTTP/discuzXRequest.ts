@@ -1,4 +1,4 @@
-import { TMethods } from "./HTTP";
+import { TMethods } from ".";
 import Request from "./Request";
 
 export default class extends Request {
