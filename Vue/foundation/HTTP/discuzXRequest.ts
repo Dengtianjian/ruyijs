@@ -8,12 +8,6 @@ export default class extends Request {
 
     return super.send<ResponseData>(null, method);
   }
-  upload<ResponseData>(uri: string | string[] = null, file: File, fileName: string = "file", body: Record<string, string> = {}) {
-    uri = Array.isArray(uri) ? uri.join("/") : uri.toString();
-    this.query("uri", uri);
-
-    return super.upload<ResponseData>(null, file, fileName, body);
-  }
   /**
    * 发送GET请求
    * @param uri URI
@@ -45,5 +39,13 @@ export default class extends Request {
    */
   delete<ResponseData>(uri: string | string[]) {
     return this.send<ResponseData>(uri, "DELETE");
+  }
+  /**
+   * 发送patch请求
+   * @param uri URI
+   * @returns Promise
+   */
+  patch<ResponseData>(uri: string | string[]) {
+    return this.send<ResponseData>(uri, "PATCH");
   }
 }

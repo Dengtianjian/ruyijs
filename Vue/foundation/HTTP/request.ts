@@ -49,7 +49,7 @@ export default class Request extends HTTP {
    * @param timeout 请求超时
    * @returns Promise
    */
-  upload<ResponseData>(uri: string | string[] = null, file: File, fileName: string = "file", body: Record<string, string> = {}) {
+  upload<ResponseData>(uri: string | string[] = null, file: File, fileName: string = "file", body: Record<string, string> = {}): Promise<ResponseData> {
     this.header("X-Ajax", "1");
 
     const F: FormData = new FormData();
@@ -59,7 +59,7 @@ export default class Request extends HTTP {
     F.append("file", file);
     F.append("fileName", fileName);
 
-    return this.body(F).post<ResponseData>(uri);
+    return this.body(F).post<ResponseData>(uri) as Promise<ResponseData>;
   }
   /**
  * 轮询

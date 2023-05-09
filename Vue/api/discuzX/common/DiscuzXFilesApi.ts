@@ -17,19 +17,19 @@ type TUploadResult = {
 }
 
 class FilesApi extends DiscuzXRequest {
-  uploadFile(file: File, body: Record<string, string> = {}, fileName: string = "file") {
-    return this.upload<TUploadResult>(null, file, fileName, body).then(res => {
-      res.data.link = `${this.requestURL}&uri=files/${res.data.fileId}`;
-      res.data.accessURL = `${this.requestURL}/${res.data.accessPath}`;
+  uploadFile(file: File, body: Record<string, string> = {}, fileName: string = "file"): Promise<TUploadResult> {
+    return this.upload<TUploadResult>("files", file, fileName, body).then(res => {
+      res.link = `${this.requestURL}&uri=files/${res.fileId}`;
+      res.accessURL = `${this.requestURL}/${res.accessPath}`;
       return res;
     });
   }
   deleteFile(fileId: string) {
-    return this.delete(fileId);
+    return this.delete(`files/${fileId}`);
   }
   genFileLink(fileId: string): string {
     return `${this.requestURL}&uri=files/${fileId}`;
   }
 }
 
-export default new FilesApi("files");
+export default new FilesApi();

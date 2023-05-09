@@ -1,4 +1,6 @@
-export type TMethods = | 'OPTIONS' | 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT';
+import helper from "../helper";
+
+export type TMethods = | 'OPTIONS' | 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT' | 'PATCH';
 
 export type TBody = Record<string, any> | BodyInit
 
@@ -210,21 +212,25 @@ export default class HTTP {
 
     const Headers = this.#headers;
 
-    if ((!Headers['content-type'] || !Headers['Content-type']) && typeof this.#body === "object" || Array.isArray(this.#body)) {
-      Headers['content-type'] = "application/json";
-    }
-
-    const URL = HTTP.genURL(this.#baseURL, uri, this.#query);
-
     const options: RequestInit = Object.assign({
       headers: Headers,
       method: method.toUpperCase(),
       mode: "cors"
     }, this.#options);
+
+    if ((!Headers['content-type'] || !Headers['Content-type']) && helper.type(this.#body) === "object" || Array.isArray(this.#body)) {
+      Headers['content-type'] = "application/json";
+      this.#body = JSON.stringify(this.#body);
+    }
+
+    const URL = HTTP.genURL(this.#baseURL, uri, this.#query);
+
     if (method !== "GET") {
       // @ts-ignore
       options['body'] = this.#body;
     }
+    console.log(options);
+    
 
     return new Promise<IResponse<ResponseData>>((resolve, reject) => {
       return fetch(URL, options).then(async res => {
