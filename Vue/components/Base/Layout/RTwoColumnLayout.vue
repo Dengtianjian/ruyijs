@@ -1,7 +1,7 @@
 <template>
   <n-layout has-sider style="background-color:transparent;">
     <n-layout-sider style="min-height:calc(100vh - 60px);">
-      <router-menu :options="menuOptions"></router-menu>
+      <RRouterMenu :options="menuOptions"></RRouterMenu>
     </n-layout-sider>
     <n-layout-content style="background-color:transparent;">
       <panel>
@@ -16,15 +16,13 @@
 import { NLayout, NLayoutSider, NLayoutContent } from 'naive-ui';
 import { AllowedComponentProps, ComponentCustomProps, VNodeProps, VNode, RendererNode, RendererElement } from 'vue';
 import { RouterLinkProps, RouterView } from 'vue-router';
+import { RTMenuOption } from '../../../types/components/Common';
 import CommonFooter from '../RCommonFooter.vue';
 import KeepAliveRouterView from '../RKeepAliveRouterView.vue';
+import RRouterMenu from '../RRouterMenu.vue';
 
 defineProps<{
-  menuOptions: Array<{
-    link?: string | AllowedComponentProps & ComponentCustomProps & VNodeProps & RouterLinkProps,
-    label?: string | (() => VNode<RendererNode, RendererElement, { [key: string]: any; }>) | AllowedComponentProps & ComponentCustomProps & VNodeProps & RouterLinkProps,
-    key: string,
-  }>
+  menuOptions: Array<RTMenuOption>
 }>();
 </script>
 

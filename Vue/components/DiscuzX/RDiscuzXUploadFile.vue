@@ -8,7 +8,7 @@ import { UploadFileInfo } from 'naive-ui';
 import config from '../../../../config';
 import DiscuzXFilesApi from '../../api/discuzX/common/DiscuzXFilesApi';
 
-DiscuzXFilesApi.url(config.APIURL);
+DiscuzXFilesApi.url(import.meta.env.VITE_API_BASE_URL);
 
 function uploadPostAttachment(file: UploadFileInfo): Promise<UploadFileInfo> {
   return DiscuzXFilesApi.uploadFile(file.file).then(res => {
