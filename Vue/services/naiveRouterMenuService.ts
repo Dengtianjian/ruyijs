@@ -64,7 +64,7 @@ export function generateRouterMenuOptions(Routes: RouteRecordRaw[], level: numbe
           }
 
           if (RouteItem.meta.menu.disabled !== undefined) {
-            Options['shodisabledw'] = RouteItem.meta.menu.disabled;
+            Options['disabled'] = RouteItem.meta.menu.disabled;
           }
           if (RouteItem.meta.menu.show !== undefined) {
             Options['show'] = RouteItem.meta.menu.show;
@@ -79,7 +79,11 @@ export function generateRouterMenuOptions(Routes: RouteRecordRaw[], level: numbe
             Options['type'] = RouteItem.meta.menu.type;
             if (RouteItem.meta.menu.type === "group") {
               Options['label'] = RouteItem.meta.menu.label?.toString() ?? RouteItem.meta.title;
-              Options['children'] = generateRouterMenuOptions(RouteItem.children);
+              if (RouteItem.children) {
+                Options['children'] = generateRouterMenuOptions(RouteItem.children);
+              } else {
+                Options['children'] = [];
+              }
             }
           } else {
             Options['label'] = NaiveUI.createdRouterLinkLabel(RouteItem.meta.menu.label?.toString() ?? RouteItem.meta.title, {
