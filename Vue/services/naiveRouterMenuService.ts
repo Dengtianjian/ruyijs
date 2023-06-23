@@ -1,22 +1,7 @@
 import { AllowedComponentProps, ComponentCustomProps, VNodeProps, VNode, RendererNode, RendererElement, VNodeChild } from "vue";
 import { RouterLinkProps, RouteRecordRaw, RouteRecordName } from "vue-router";
 import NaiveUI from "../foundation/naiveUI";
-
-export type TMenuOption = {
-  link?: string | AllowedComponentProps & ComponentCustomProps & VNodeProps & RouterLinkProps,
-  label?: string | (() => VNode<RendererNode, RendererElement, { [key: string]: any; }>) | AllowedComponentProps & ComponentCustomProps & VNodeProps & RouterLinkProps,
-  childrenNames?: string[],
-  key: string,
-  index: number,
-  children?: Array<TMenuOption>
-
-  disabled?: boolean,
-  extra?: string | (() => VNodeChild),
-  icon?: () => VNode,
-  show?: boolean,
-  type?: "group",
-  level?: number
-}
+import { RTMenuOption } from "../types/components/Common";
 
 function getChildrenRouteNames(Routes: RouteRecordRaw[]): string[] {
   const Names: string[] = [];
@@ -46,13 +31,13 @@ function getRoute(Routes: RouteRecordRaw[], name: RouteRecordName): RouteRecordR
 
   return routes;
 }
-export function generateRouterMenuOptions(Routes: RouteRecordRaw[], level: number | number[] | boolean = false, RouteName: string = null): Array<TMenuOption> {
+export function generateRouterMenuOptions(Routes: RouteRecordRaw[], level: number | number[] | boolean = false, RouteName: string = null): Array<RTMenuOption> {
   if (RouteName) {
     Routes = getRoute(Routes, RouteName);
     if (!Routes) return [];
   }
 
-  const MenuRoutes: Array<TMenuOption> = [];
+  const MenuRoutes: Array<RTMenuOption> = [];
   Routes.forEach(RouteItem => {
     if (level === false || level && RouteItem.meta?.menu?.level) {
       if (level === false || (Array.isArray(level) && level.includes(RouteItem.meta.menu.level)) || level === RouteItem.meta.menu.level) {

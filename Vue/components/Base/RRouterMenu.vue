@@ -10,14 +10,6 @@ import helper from '../../foundation/helper';
 import naiveUIService from '../../services/naiveUIService';
 import { RTMenuOption } from '../../types/components/Common';
 
-type TMenu = {
-  link?: string | AllowedComponentProps & ComponentCustomProps & VNodeProps & RouterLinkProps,
-  key: string,
-  label?: string,
-  children?: TMenu[],
-  type?: string
-}
-
 const Props = defineProps({
   options: {
     type: Array as PropType<Array<RTMenuOption>>
@@ -33,7 +25,7 @@ Router.beforeResolve((to, from, next) => {
   next();
 });
 
-function transform(menus: TMenu[]): MenuOption[] {
+function transform(menus: RTMenuOption[]): MenuOption[] {
   return menus.map(optionItem => {
     if (optionItem.type === "group" && optionItem.children) {
       // @ts-ignore
@@ -42,9 +34,9 @@ function transform(menus: TMenu[]): MenuOption[] {
     }
     if (helper.type(optionItem.link) === "string") {
       return {
-        label: naiveUIService.createdRouterLinkLabel(optionItem.label, {
+        label: typeof optionItem.label === "string" ? naiveUIService.createdRouterLinkLabel(optionItem.label, {
           to: optionItem.link
-        }),
+        }) : optionItem.label,
         key: optionItem.key
       }
     } else {
@@ -59,6 +51,4 @@ const menuOptions: ComputedRef<MenuOption[]> = computed(() => {
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
