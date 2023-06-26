@@ -1,5 +1,5 @@
 import { TMethods } from ".";
-import Request from "./Request";
+import Request from "./request";
 
 export default class extends Request {
   send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<ResponseData> {
@@ -13,7 +13,7 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  get<ResponseData>(uri: string | string[]) {
+  get<ResponseData>(uri: string | string[]): Promise<ResponseData> {
     return this.send<ResponseData>(uri, "GET");
   }
   /**
@@ -21,7 +21,7 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  post<ResponseData>(uri: string | string[]) {
+  post<ResponseData>(uri: string | string[]): Promise<ResponseData> {
     return this.send<ResponseData>(uri, "POST");
   }
   /**
@@ -29,7 +29,7 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  put<ResponseData>(uri: string | string[]) {
+  put<ResponseData>(uri: string | string[]): Promise<ResponseData> {
     return this.send<ResponseData>(uri, "PUT");
   }
   /**
@@ -37,7 +37,7 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  delete<ResponseData>(uri: string | string[]) {
+  delete<ResponseData>(uri: string | string[]): Promise<ResponseData> {
     return this.send<ResponseData>(uri, "DELETE");
   }
   /**
@@ -45,7 +45,7 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  patch<ResponseData>(uri: string | string[]) {
+  patch<ResponseData>(uri: string | string[]): Promise<ResponseData> {
     return this.send<ResponseData>(uri, "PATCH");
   }
 }

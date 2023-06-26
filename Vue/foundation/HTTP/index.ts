@@ -117,7 +117,7 @@ export default class HTTP {
    * @param pipes 管道名称
    * @returns HTTP
    */
-  pipes(...pipes: string[]): HTTP {
+  pipes(...pipes: string[]): this {
     this.#pipes.push(...pipes);
     return this;
   }
@@ -128,7 +128,7 @@ export default class HTTP {
    * @param allowNull 如果传入的值为null是否继续传
    * @returns HTTP
    */
-  query(key: string, value: number | string | boolean, allowNull: boolean = false): HTTP {
+  query(key: string, value: number | string | boolean, allowNull: boolean = false): this {
     if (value === null && allowNull === false) {
       return this;
     }
