@@ -102,6 +102,7 @@ export default class HTTP {
     }
     this.#body = body;
     this.#pipes = pipes;
+    this.#options = options;
   }
   /**
    * 设置请求根地址
@@ -128,7 +129,7 @@ export default class HTTP {
    * @param allowNull 如果传入的值为null是否继续传
    * @returns HTTP
    */
-  query(key: string, value: number | string | boolean, allowNull: boolean = false): HTTP {
+  query(key: string, value: number | string | boolean, allowNull: boolean = false): this {
     if (value === null && allowNull === false) {
       return this;
     }
@@ -290,7 +291,12 @@ export default class HTTP {
    * @param uri URI
    * @returns Promise
    */
-  get<ResponseData>(uri: string | string[]) {
+  get<ResponseData>(uri: string | string[], query: Record<string, number | string> = null) {
+    if (query) {
+      for (const key in query) {
+        this.query(key, query[key]);
+      }
+    }
     return this.send<ResponseData>(uri, "GET");
   }
   /**
@@ -298,7 +304,10 @@ export default class HTTP {
    * @param uri URI
    * @returns Promise
    */
-  post<ResponseData>(uri: string | string[]) {
+  post<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
     return this.send<ResponseData>(uri, "POST");
   }
   /**
@@ -306,7 +315,10 @@ export default class HTTP {
    * @param uri URI
    * @returns Promise
    */
-  put<ResponseData>(uri: string | string[]) {
+  put<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
     return this.send<ResponseData>(uri, "PUT");
   }
   /**
@@ -314,7 +326,21 @@ export default class HTTP {
    * @param uri URI
    * @returns Promise
    */
-  delete<ResponseData>(uri: string | string[]) {
+  delete<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
     return this.send<ResponseData>(uri, "DELETE");
+  }
+  /**
+  * 发送patch请求
+  * @param uri URI
+  * @returns Promise
+  */
+  patch<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
+    return this.send<ResponseData>(uri, "PATCH");
   }
 }
