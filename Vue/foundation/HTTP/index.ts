@@ -118,7 +118,7 @@ export default class HTTP {
    * @param pipes 管道名称
    * @returns HTTP
    */
-  pipes(...pipes: string[]): HTTP {
+  pipes(...pipes: string[]): this {
     this.#pipes.push(...pipes);
     return this;
   }

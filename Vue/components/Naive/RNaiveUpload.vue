@@ -1,12 +1,11 @@
 <template>
-  <n-upload list-type="image-card" :file-list="FileList" @change="uploadFile"
-    @remove="removeFile" v-bind="$attrs">
+  <n-upload list-type="image-card" :file-list="FileList" @change="uploadFile" @remove="removeFile" v-bind="$attrs">
     <slot />
   </n-upload>
 </template>
 
 <script lang="ts" setup>
-import { UploadFileInfo, useMessage } from 'naive-ui';
+import { UploadFileInfo, useMessage, UploadProps } from 'naive-ui';
 import { reactive, watch } from 'vue';
 
 const NMessage = useMessage();
@@ -17,7 +16,7 @@ const Props = withDefaults(defineProps<{
   single?: boolean,
   upload: (file: UploadFileInfo) => Promise<string | UploadFileInfo>
   remove: (file: UploadFileInfo) => Promise<boolean>
-}>(), {
+} & UploadProps>(), {
   files: null,
   file: null,
   single: false
