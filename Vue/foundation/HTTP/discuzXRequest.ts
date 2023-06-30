@@ -1,4 +1,4 @@
-import { TMethods } from ".";
+import { TBody, TMethods } from ".";
 import Request from "./Request";
 
 export default class extends Request {
@@ -13,7 +13,12 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  get<ResponseData>(uri: string | string[]) {
+  get<ResponseData>(uri: string | string[], query: Record<string, number | string> = null) {
+    if (query) {
+      for (const key in query) {
+        this.query(key, query[key]);
+      }
+    }
     return this.send<ResponseData>(uri, "GET");
   }
   /**
@@ -21,7 +26,10 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  post<ResponseData>(uri: string | string[]) {
+  post<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
     return this.send<ResponseData>(uri, "POST");
   }
   /**
@@ -29,7 +37,10 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  put<ResponseData>(uri: string | string[]) {
+  put<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
     return this.send<ResponseData>(uri, "PUT");
   }
   /**
@@ -37,7 +48,10 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  delete<ResponseData>(uri: string | string[]) {
+  delete<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
     return this.send<ResponseData>(uri, "DELETE");
   }
   /**
@@ -45,7 +59,10 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  patch<ResponseData>(uri: string | string[]) {
+  patch<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
     return this.send<ResponseData>(uri, "PATCH");
   }
 }
