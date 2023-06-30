@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { UploadFileInfo, useMessage, UploadProps } from 'naive-ui';
+import { UploadFileInfo, useMessage } from 'naive-ui';
 import { reactive, watch } from 'vue';
 
 const NMessage = useMessage();
@@ -16,7 +16,7 @@ const Props = withDefaults(defineProps<{
   single?: boolean,
   upload: (file: UploadFileInfo) => Promise<string | UploadFileInfo>
   remove: (file: UploadFileInfo) => Promise<boolean>
-} & UploadProps>(), {
+}>(), {
   files: null,
   file: null,
   single: false

@@ -6,7 +6,7 @@
     <template #label v-if="$slots.label">
       <slot name="label" />
     </template>
-    <div>
+    <div :style="`${block ? 'flex:1' : ''};`">
       <slot />
       <div class="form-item-bottom" v-if="$slots.bottom">
         <slot name="bottom" />
@@ -25,9 +25,11 @@
 import { NFormItem } from 'naive-ui';
 
 withDefaults(defineProps<{
-  prompt?: string
+  prompt?: string,
+  block?: boolean
 }>(), {
-  prompt: null
+  prompt: null,
+  block: false
 })
 </script>
 

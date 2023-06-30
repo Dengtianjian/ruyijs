@@ -5,7 +5,6 @@
 <script lang="ts" setup>
 import RNaiveUpload from '../Naive/RNaiveUpload.vue';
 import { UploadFileInfo } from 'naive-ui';
-import config from '../../../../config';
 import DiscuzXFilesApi from '../../api/discuzX/common/DiscuzXFilesApi';
 
 DiscuzXFilesApi.url(import.meta.env.VITE_API_BASE_URL);
