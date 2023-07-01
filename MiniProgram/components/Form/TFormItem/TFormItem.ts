@@ -22,7 +22,8 @@ Component<{}, {
   }
 }, {}>({
   options: {
-    virtualHost: true
+    virtualHost: true,
+    multipleSlots: true
   },
   /**
    * 组件的属性列表

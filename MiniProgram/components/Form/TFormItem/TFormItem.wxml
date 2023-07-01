@@ -6,4 +6,7 @@
   <view class="t-form-content">
     <slot />
   </view>
+  <view class="t-form-prompt">
+    <slot name="prompt" />
+  </view>
 </view>

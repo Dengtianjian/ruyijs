@@ -1,5 +1,5 @@
 import MPStore from "./MPStore";
-export default function <TData, TCustom>(options: WechatMiniprogram.Page.Options<TData, TCustom>, stores: MPStore[] = []) {
+export default function <TData, TCustom>(options: WechatMiniprogram.Page.Options<TData, TCustom>, stores: MPStore<any>[] = []) {
   const RuyiPageId = Date.now();
 
   const P = getCurrentPages()?.[0];
@@ -10,6 +10,7 @@ export default function <TData, TCustom>(options: WechatMiniprogram.Page.Options
   // @ts-ignore
   options['_RuyiPageId'] = RuyiPageId.toString();
   Page<TData, TCustom>(options);
+  
   stores.forEach(item => {
     item.pageLink(RuyiPageId.toString());
   });

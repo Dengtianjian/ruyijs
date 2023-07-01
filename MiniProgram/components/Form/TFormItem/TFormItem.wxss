@@ -75,3 +75,9 @@
   display: flex;
   gap: 20rpx;
 }
+
+.t-form-prompt {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #999;
+}

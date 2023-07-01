@@ -37,6 +37,8 @@ export default class extends HTTP {
     return super.send<ResponseData>(uri, method).then(res => {
       this.#tokenHandle(res.header);
       return res.data;
+    }).finally(() => {
+      this.removeHeader("Authorization");
     });
   }
   /**

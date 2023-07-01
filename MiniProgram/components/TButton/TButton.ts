@@ -79,6 +79,10 @@ Component<{},
     radius: {
       type: NumberConstructor,
       value: number
+    },
+    storage: {
+      type: BooleanConstructor,
+      value: boolean
     }
   },
   {
@@ -182,6 +186,10 @@ Component<{},
       radius: {
         type: Number,
         value: 0
+      },
+      storage: {
+        type: Boolean,
+        value: false
       }
     },
     methods: {

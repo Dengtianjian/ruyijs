@@ -147,6 +147,15 @@ export default class HTTP {
     return this;
   }
   /**
+   * 移除头部指定键
+   * @param key 键名
+   * @returns this
+   */
+  removeHeader(key: string) {
+    delete this.#headers[key];
+    return this;
+  }
+  /**
    * 生成一个URL
    * @param baseURL 基URL
    * @param uri URI

@@ -21,6 +21,11 @@ Component<{
       }
     }
   },
+  lifetimes: {
+    ready() {
+      this.update();
+    }
+  },
 
   /**
    * 组件的初始数据
@@ -34,6 +39,8 @@ Component<{
    */
   methods: {
     formatNumber(val: string | number) {
+      if (typeof val === "number" && val <= 0) return val.toString();
+
       const Str: string = val.toString();
       const HasPoint: boolean = Str.includes(".");
       const Int: string = HasPoint ? Str.split(".")[0] : Str;
