@@ -8,22 +8,31 @@ export default {
           routeType
         }).then(resolve).catch(reject);
       }, delay);
-    })
+    });
   },
-  dalaySwitchTab(url: string, delay: number = 1444) {
+  delaySwitchTab(url: string, delay: number = 1444) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         wx.switchTab({
           url
         }).then(resolve).catch(reject);
       }, delay);
-    })
+    });
   },
-  dalayNavigateBack(delta: number = 1, delay: number = 1444) {
+  delayNavigateBack(delta: number = 1, delay: number = 1444) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         wx.navigateBack({
           delta
+        }).then(resolve).catch(reject);
+      }, delay);
+    });
+  },
+  delayRedirectTo(url: string, delay: number = 1444) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        wx.redirectTo({
+          url
         }).then(resolve).catch(reject);
       }, delay);
     })
