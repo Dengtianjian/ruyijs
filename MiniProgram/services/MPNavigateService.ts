@@ -19,7 +19,11 @@ export default {
       }, delay);
     });
   },
-  delayNavigateBack(delta: number = 1, delay: number = 1444) {
+  delayNavigateBack(delta: number = 1, delay: number = 1444, redirectToURL: string = null) {
+    const Pages = getCurrentPages();
+    if (Pages.length === 1 && redirectToURL) {
+      return this.delayRedirectTo(redirectToURL, delay);
+    }
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         wx.navigateBack({
