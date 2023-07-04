@@ -1,0 +1,16 @@
+<!-- Ruyi/MiniProgram/components/REmpty/REmpty.wxml -->
+<view class="r-empty" hidden="{{ !show }}">
+  <view class="r-empty-icon" wx:if="{{ icon||useIconSlot }}">
+    <image src="{{ icon }}" wx:if="{{ icon }}" mode="widthFix"></image>
+    <slot name="icon" />
+  </view>
+  <view class="r-empry-title" wx:if="{{ useTitleSlot||title }}">
+    {{ title }}
+    <slot name="title" />
+  </view>
+  <view class="r-empry-description" wx:if="{{ useDescriptionSlot||description }}">
+    {{ description }}
+    <slot name="description" />
+  </view>
+  <slot />
+</view>
