@@ -13,7 +13,7 @@ export default class MPStore<T extends Record<string | number, any>> {
   #getPageId() {
     const Page = getCurrentPages()?.[0];
     if (!Page) return null;
-    return Page['_RuyiPageId'].toString();
+    return Page.data._RuyiPageId.toString();
   }
   #updatePages(key: string, callback?: () => void, value: any = null) {
     key = key.toString();
@@ -21,9 +21,10 @@ export default class MPStore<T extends Record<string | number, any>> {
 
     if (this.#links.has(key)) {
       const links = this.#links.get(key);
+
       Pages.forEach(item => {
-        if (item['_RuyiPageId'] && links.has(item['_RuyiPageId'])) {
-          links.get(item['_RuyiPageId']).forEach(AttributeName => {
+        if (item.data._RuyiPageId && links.has(item.data._RuyiPageId)) {
+          links.get(item.data._RuyiPageId).forEach(AttributeName => {
             item.setData({
               [AttributeName.toString()]: value ?? this.#data[key]
             }, callback)
@@ -43,8 +44,8 @@ export default class MPStore<T extends Record<string | number, any>> {
     this.#updatePages(key.toString(), callback, value);
     return this;
   }
-  link(key: string, storeKey: keyof T = null) {
-    const PageId = this.#getPageId();
+  link(key: string, storeKey: keyof T = null, pageId: string = null) {
+    const PageId = pageId ?? this.#getPageId();
     if (storeKey === null) {
       storeKey = key.toString();
     }
@@ -53,6 +54,9 @@ export default class MPStore<T extends Record<string | number, any>> {
       if (storeKey) {
         if (!this.#links.has(storeKey)) {
           this.#links.set(storeKey, new Map());
+          this.#links.get(storeKey).set(PageId, []);
+        }
+        if (!this.#links.get(storeKey).has(pageId)) {
           this.#links.get(storeKey).set(PageId, []);
         }
 

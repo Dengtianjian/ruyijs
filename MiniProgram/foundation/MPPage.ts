@@ -1,19 +1,38 @@
 import MPStore from "./MPStore";
-export default function <TData, TCustom>(options: WechatMiniprogram.Page.Options<TData, TCustom>, stores: MPStore<any>[] = []) {
-  const RuyiPageId = Date.now();
 
-  const P = getCurrentPages()?.[0];
-  if (P) {
-    P['_RuyiPageId'] = RuyiPageId.toString();
+export type TMPPageData = {
+  _StaticURL?: string
+  _PageScrollTop?: number
+  _RuyiPageId?: string
+};
+export type TMPPageOptions = {
+  useStore?: (store: MPStore<any>, pageDataKey: string, storeKey?: string) => void
+};
+export type TMPPageCustom = {
+  useStore?: (store: MPStore<any>, pageDataKey: string, storeKey?: string) => void
+}
+
+export default function <TData, TCustom>(options: TMPPageOptions & WechatMiniprogram.Page.Options<TData & TMPPageData, TCustom>) {
+  const RuyiPageId = Date.now().toString();
+
+  options.data._RuyiPageId = RuyiPageId;
+
+  if (!options['data']['_StaticURL']) {
+    options['data']['_StaticURL'] = "";
   }
 
-  // @ts-ignore
-  options['_RuyiPageId'] = RuyiPageId.toString();
-  Page<TData, TCustom>(options);
-  
-  stores.forEach(item => {
-    item.pageLink(RuyiPageId.toString());
-  });
+  if (!options['onPageScroll']) {
+    options['onPageScroll'] = function (options) {
+      // @ts-ignore
+      this.setData({
+        _PageScrollTop: options.scrollTop
+      });
+    }
+  }
 
-  return;
+  options.useStore = function (store, pageDataKey, storeKey) {
+    store.link(pageDataKey, storeKey, RuyiPageId);
+  }
+
+  return Page<TData & TMPPageData, TMPPageCustom & TCustom>(options);
 }
