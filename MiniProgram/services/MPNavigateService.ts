@@ -19,10 +19,14 @@ export default {
       }, delay);
     });
   },
-  delayNavigateBack(delta: number = 1, delay: number = 1444, redirectToURL: string = null) {
+  delayNavigateBack(delta: number = 1, delay: number = 1444, redirectToURL: string = null, redirectType: "navigate" | "switchTab" = "navigate") {
     const Pages = getCurrentPages();
     if (Pages.length === 1 && redirectToURL) {
-      return this.delayRedirectTo(redirectToURL, delay);
+      if (redirectType === "navigate") {
+        return this.delayRedirectTo(redirectToURL, delay);
+      } else {
+        return this.delaySwitchTab(redirectToURL, delay);
+      }
     }
     return new Promise((resolve, reject) => {
       setTimeout(() => {
