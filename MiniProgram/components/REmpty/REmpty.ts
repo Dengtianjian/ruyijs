@@ -29,6 +29,10 @@ Component<{
   show: {
     type: BooleanConstructor,
     value: boolean
+  },
+  loading: {
+    type: BooleanConstructor,
+    value: boolean
   }
 }, {
 
@@ -67,6 +71,10 @@ Component<{
       show: {
         type: Boolean,
         value: true
+      },
+      loading: {
+        type: Boolean,
+        value: false
       }
     },
 
