@@ -19,7 +19,7 @@ export default class extends Request {
    * @param uri URI
    * @returns Promise
    */
-  get<ResponseData>(uri: string | string[]):Promise<ResponseData> {
+  get<ResponseData>(uri: string | string[]): Promise<ResponseData> {
     return this.send<ResponseData>(uri, "GET");
   }
   /**
