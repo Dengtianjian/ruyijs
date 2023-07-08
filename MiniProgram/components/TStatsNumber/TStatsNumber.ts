@@ -3,7 +3,8 @@ Component<{
   numberValue: string
 }, {
   value: {
-    type: NumberConstructor | StringConstructor
+    type: StringConstructor,
+    optionalTypes: [NumberConstructor, StringConstructor],
     observer: (newV: number | string) => void
   }
 }, {
@@ -15,7 +16,8 @@ Component<{
    */
   properties: {
     value: {
-      type: Number,
+      type: String,
+      optionalTypes: [Number, String],
       observer() {
         this.update();
       }

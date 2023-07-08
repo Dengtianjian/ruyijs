@@ -1,15 +1,15 @@
 /* components/base/TUploadImageList/TUploadImageList.wxss */
-.upload-image-list {
+.upload-media-list {
   display: flex;
   flex-wrap: wrap;
   gap: 10rpx;
 }
 
-.upload-image-item {
+.upload-media-item {
   position: relative;
 }
 
-.upload-image_remove {
+.upload-media_remove {
   position: absolute;
   z-index: 1;
   right: 0;
@@ -24,15 +24,15 @@
   background: rgba(0, 0, 0, 0.6);
 }
 
-.upload-image-item>image,
-.upload-image-item>video {
+.upload-media_image,
+.upload-media_video {
   display: block;
   width: 218rpx;
   height: 218rpx;
   border-radius: 16rpx;
 }
 
-.upload-image-button {
+.upload-media-button {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,6 +45,6 @@
   border-radius: 16rpx;
 }
 
-.upload-image-button_icon {
+.upload-media-button_icon {
   font-size: 36rpx;
 }

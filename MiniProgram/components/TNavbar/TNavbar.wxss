@@ -15,11 +15,11 @@
   margin-left: 10rpx;
 }
 
-.navbar-page-route>view {
+.navbar-page-route-icon {
   font-size: 36rpx;
 }
 
-.navbar-page-route>view::active {
+.navbar-page-route-icon::active {
   opacity: 0.8;
 }
 
