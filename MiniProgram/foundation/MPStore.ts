@@ -18,10 +18,8 @@ export default class MPStore<T extends Record<string | number, any>> {
   #updatePages(key: string, callback?: () => void, value: any = null) {
     key = key.toString();
     const Pages = getCurrentPages();
-
     if (this.#links.has(key)) {
       const links = this.#links.get(key);
-
       Pages.forEach(item => {
         if (item.data._RuyiPageId && links.has(item.data._RuyiPageId)) {
           links.get(item.data._RuyiPageId).forEach(AttributeName => {
