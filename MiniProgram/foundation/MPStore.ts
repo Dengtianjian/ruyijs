@@ -33,7 +33,6 @@ export default class MPStore<T extends Record<string | number, any>> {
   }
   set(key: keyof T, value: any, callback?: () => void) {
     this.#data[key.toString()] = value;
-
     this.#updatePages(key.toString(), callback)
     return this;
   }

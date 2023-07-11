@@ -58,11 +58,12 @@ export default class MPPaginationStore<T> {
       perPage: 1,
       total: 0
     });
-    this.#store.link(`${this.#attributeName}_loading`, "loading");
-    this.#store.link(`${this.#attributeName}_finished`, "finished");
-    this.#store.link(`${this.#attributeName}_page`, "page");
-    this.#store.link(`${this.#attributeName}_perPage`, "perPage");
-    this.#store.link(`${this.#attributeName}_total`, "total");
+
+    this.#store.link(`${this.#attributeName}_loading`, "loading", pageThis.data._RuyiPageId);
+    this.#store.link(`${this.#attributeName}_finished`, "finished", pageThis.data._RuyiPageId);
+    this.#store.link(`${this.#attributeName}_page`, "page", pageThis.data._RuyiPageId);
+    this.#store.link(`${this.#attributeName}_perPage`, "perPage", pageThis.data._RuyiPageId);
+    this.#store.link(`${this.#attributeName}_total`, "total", pageThis.data._RuyiPageId);
 
     return this;
   }
@@ -90,6 +91,7 @@ export default class MPPaginationStore<T> {
       if (data.pagination.items < this.#perPage) {
         this.finished(true);
       }
+
       this.page(this.page() + 1);
 
       return data;
