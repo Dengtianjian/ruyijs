@@ -241,6 +241,9 @@ Component<{}, {
     },
     input(options) {
       this.triggerEvent("input", options);
+      this.setData({
+        value: options.detail.value
+      });
     },
     confirm(options) {
       this.triggerEvent("confirm", options);
