@@ -117,6 +117,7 @@ Component<{
           dis.complete({
             height: res.height
           });
+          this.triggerEvent("updateHeight", res.height);
         }).exec();
       });
     },

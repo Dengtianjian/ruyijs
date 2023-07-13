@@ -1,7 +1,8 @@
 // components/base/navbar/navbar.ts
 Component<{
   pages: string[],
-  isHomePage: boolean
+  isHomePage: boolean,
+  height: number
 }, {
   top: {
     type: NumberConstructor,
@@ -58,6 +59,9 @@ Component<{
 }, {
   back: () => void
   home: () => void
+  headerBarHeightUpdate: (event: {
+    detail: number
+  }) => void
 }>({
   options: {
     addGlobalClass: true,
@@ -77,7 +81,7 @@ Component<{
         pages,
         isHomePage: HomePageRoute === CureentPageRoute
       });
-    },
+    }
   },
   /**
    * 组件的属性列表
@@ -142,7 +146,8 @@ Component<{
    */
   data: {
     isHomePage: false,
-    pages: []
+    pages: [],
+    height: 0
   },
 
   /**
@@ -156,6 +161,12 @@ Component<{
       wx.reLaunch({
         url: this.properties.homePageUrl ?? `/${this.data.pages[0]}`
       });
+    },
+    headerBarHeightUpdate(e) {
+      this.setData({
+        height: e.detail
+      });
+      this.triggerEvent("heightUpdate", e.detail);
     }
   }
 })
