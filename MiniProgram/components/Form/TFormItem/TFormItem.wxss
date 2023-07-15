@@ -37,6 +37,7 @@
   /* min-height: 88rpx; */
   line-height: 28rpx;
   font-size: 28rpx;
+  word-break: break-all;
   box-sizing: border-box;
   border-radius: var(--radius-angle);
 }
@@ -73,7 +74,12 @@
 
 .t-form-content radio-group {
   display: flex;
+  flex-wrap: wrap;
   gap: 20rpx;
+}
+
+.t-form-content radio-group radio {
+  flex-shrink: 0;
 }
 
 .t-form-prompt {

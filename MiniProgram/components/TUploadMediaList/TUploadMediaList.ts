@@ -47,6 +47,10 @@ Component<{}, {
       url: string,
       type: "image" | "video"
     }>
+  },
+  controlled: {
+    type: BooleanConstructor,
+    value: boolean
   }
 }, {
   addMedia: () => void,
@@ -115,6 +119,10 @@ Component<{}, {
     fileList: {
       type: Array,
       value: []
+    },
+    controlled: {
+      type: Boolean,
+      value: false
     }
   },
 
@@ -168,21 +176,32 @@ Component<{}, {
         const fileList: Array<{
           key?: string,
           url: string,
+          coverURL?: string,
           type: "image" | "video"
         }> = [];
+
         res.tempFiles.forEach(item => {
           fileList.push({
             url: this.properties.messageFile ? item.path : item.tempFilePath,
+            coverURL: item?.thumbTempFilePath ?? null,
             type: item.fileType
           });
         });
 
-        this.setData({
-          fileList
-        });
+        if (this.data.controlled) {
+          this.triggerEvent("update", res.tempFiles);
+          this.triggerEvent("add", res.tempFiles);
+        } else {
+          this.setData({
+            fileList
+          }, () => {
+            this.triggerEvent("update", this.data.fileList);
+            this.triggerEvent("add", this.data.fileList);
+          });
+        }
       }).catch(err => {
-
-      })
+        console.error(err);
+      });
     },
     previewMedia(options) {
       wx.previewMedia({
@@ -193,9 +212,17 @@ Component<{}, {
     removeMedia(options) {
       const fileList = this.properties.fileList;
       fileList.splice(Number(options.currentTarget.dataset.index), 1);
-      this.setData({
-        fileList
-      });
+
+      if (this.data.controlled) {
+        this.triggerEvent("remove", Number(options.currentTarget.dataset.index));
+      } else {
+        this.setData({
+          fileList
+        }, () => {
+          this.triggerEvent("remove", this.data.fileList);
+          this.triggerEvent("update", this.data.fileList);
+        });
+      }
     }
   }
 })
