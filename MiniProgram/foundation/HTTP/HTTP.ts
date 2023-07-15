@@ -284,7 +284,13 @@ export default class HTTP {
             resolve(responseBody);
           }
         },
-        fail: reject
+        fail: reject,
+        complete: () => {
+          this.#query = {};
+          this.#body = null;
+          this.#pipes = [];
+          this.#headers = {};
+        }
       })
     });
   }
