@@ -283,7 +283,17 @@ export default class HTTP {
         } else {
           resolve(Response);
         }
-      }).catch(reject);
+      }).catch(reject).finally(() => {
+        this.#query = {};
+
+        this.#pipes = [];
+
+        this.#body = null;
+
+        this.#headers = {};
+
+        this.#options = {};
+      })
     });
   }
   /**
