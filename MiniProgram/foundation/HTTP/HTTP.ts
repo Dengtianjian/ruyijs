@@ -253,22 +253,27 @@ export default class HTTP {
 
     if (this.#pipes.length) {
       this.query("_pipes", this.#pipes.join(","));
+      this.#pipes = [];
     }
 
     const Headers = this.#headers;
+    this.#headers = {};
 
     if ((!Headers['content-type'] || !Headers['Content-type']) && typeof this.#body === "object" || Array.isArray(this.#body)) {
       Headers['content-type'] = "application/json";
     }
 
     const URL = HTTP.genURL(this.#baseURL, uri, this.#query);
+    this.#query = {}
 
+    const data = this.#body;
+    this.#body = null;
     return new Promise<IResponse<ResponseData>>((resolve, reject) => {
       wx.request<HTTPResponse<ResponseData>>({
         url: URL,
         method,
         header: Headers,
-        data: this.#body,
+        data,
         success({
           data,
           statusCode,
@@ -284,13 +289,7 @@ export default class HTTP {
             resolve(responseBody);
           }
         },
-        fail: reject,
-        complete: () => {
-          this.#query = {};
-          this.#body = null;
-          this.#pipes = [];
-          this.#headers = {};
-        }
+        fail: reject
       })
     });
   }

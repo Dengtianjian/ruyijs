@@ -1,11 +1,11 @@
 // components/base/TAlert/TAlert.ts
 
 const TypeIcon: Record<string, string> = {
-  default: "antdv antdv-alert-fill",
-  info: "antdv antdv-info-circle-fill",
-  success: "antdv antdv-check-circle-fill",
-  warning: "antdv antdv-warning-circle-fill",
-  error: "antdv antdv-error-fill",
+  default: "antd antd-alert-fill",
+  info: "antd antd-info-circle-fill",
+  success: "antd antd-check-circle-fill",
+  warning: "antd antd-warning-circle-fill",
+  error: "antd antd-error-fill",
 }
 
 Component<{}, {

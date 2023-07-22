@@ -12,5 +12,5 @@
       <slot />
     </view>
   </view>
-  <view class="t-alert_close antdv antdv-close" wx:if="{{ closable }}" bind:tap="closeAlert"></view>
+  <view class="t-alert_close antd antd-close" wx:if="{{ closable }}" bind:tap="closeAlert"></view>
 </view>

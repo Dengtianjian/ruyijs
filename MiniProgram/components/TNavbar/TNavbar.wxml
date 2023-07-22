@@ -1,10 +1,10 @@
 <!-- components/base/navbar/navbar.wxml -->
-<t-header-bar frontBackground="{{ frontBackground }}" backBackground="{{ backBackground }}" top="{{ top }}" threshold="{{ threshold }}" defaultOpacity="{{ defaultOpacity }}" reachOpacity="{{ reachOpacity }}" defaultColor="{{ defaultColor }}" reachColor="{{ reachColor }}" fixed="{{ fixed }}" zIndex="{{ zIndex }}" placeholder="{{ placeholder }}" bind:updateHeight="headerBarHeightUpdate" >
+<t-header-bar frontBackground="{{ frontBackground }}" backBackground="{{ backBackground }}" top="{{ top }}" threshold="{{ threshold }}" defaultOpacity="{{ defaultOpacity }}" reachOpacity="{{ reachOpacity }}" defaultColor="{{ defaultColor }}" reachColor="{{ reachColor }}" fixed="{{ fixed }}" zIndex="{{ zIndex }}" placeholder="{{ placeholder }}" bind:updateHeight="headerBarHeightUpdate">
   <view class="navbar" style="grid-template-columns:174rpx auto;">
     <view class="navbar-left">
       <view class="navbar-page-route" wx:if="{{ !customLeft }}">
-        <view wx:if="{{ pages.length>1 }}" bindtap="back" class="navbar-page-route-icon shoutao st-back"></view>
-        <view wx:if="{{ !isHomePage }}" bindtap="home" class="navbar-page-route-icon shoutao st-homefill"></view>
+        <view wx:if="{{ pages.length>1 }}" bindtap="back" class="navbar-page-route-icon taobao taobao-back"></view>
+        <view wx:if="{{ !isHomePage }}" bindtap="home" class="navbar-page-route-icon taobao taobao-home"></view>
       </view>
       <slot name="left" />
     </view>

@@ -9,6 +9,7 @@ export default {
     if (!List.has(name)) {
       return;
     }
+
     List.get(name).forEach((item) => {
       item(...params);
     });
@@ -26,7 +27,7 @@ export default {
       }
     };
   },
-  subscribe<Params>(name: string, callback: (...params: any[]) => void): {
+  subscribe(name: string, callback: (...params: any[]) => void): {
     cancel: () => void
   } {
     if (!List.has(name)) {

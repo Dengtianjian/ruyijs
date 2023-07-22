@@ -14,7 +14,7 @@
     <view class="t-cell-content" bind:tap="tapContent">
       <slot />
       {{ content }}
-      <text class="t-cell-content_icon antdv antdv-right" wx:if="{{ link }}"></text>
+      <text class="t-cell-content_icon antd antd-right" wx:if="{{ link }}"></text>
     </view>
   </view>
   <view class="t-cell-description {{ useDescriptionSlot||description?'t-cell-description_used':'' }}" bind:tap="tapDescription">
