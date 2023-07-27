@@ -5,7 +5,6 @@ export default class extends Request {
   send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<ResponseData> {
     uri = Array.isArray(uri) ? uri.join("/") : uri.toString();
     this.query("uri", uri);
-
     return super.send<ResponseData>(null, method);
   }
   /**
