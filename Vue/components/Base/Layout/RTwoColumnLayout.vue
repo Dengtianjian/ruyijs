@@ -14,8 +14,6 @@
 
 <script lang="ts" setup>
 import { NLayout, NLayoutSider, NLayoutContent } from 'naive-ui';
-import { AllowedComponentProps, ComponentCustomProps, VNodeProps, VNode, RendererNode, RendererElement } from 'vue';
-import { RouterLinkProps, RouterView } from 'vue-router';
 import { RTMenuOption } from '../../../types/components/Common';
 import CommonFooter from '../RCommonFooter.vue';
 import KeepAliveRouterView from '../RKeepAliveRouterView.vue';
