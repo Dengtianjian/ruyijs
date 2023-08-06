@@ -1,28 +1,41 @@
 import DiscuzXRequest from "../../foundation/HTTP/DiscuzXRequest";
 
-export type TDiscuzXAttachment = {
-  aid: number,
-  downloadLink: string,
-  fileName: string,
-  height: number,
-  width: number,
-  isImage: boolean,
-  size: number,
-  thumbURL: string
-};
-
 export class DiscuzXAttachmentsApi extends DiscuzXRequest {
   /**
 * 上传文件
+  上传成功返回的是附件ID
 * @param tempFilePath 上传的文件路径
 * @param fileName FormData的键名
 * @param body 请求体，会添加到FormData里
 * @param task 上传任务，可以用于监听上传进度等
 * @param timeout 请求超时
-* @returns Promise
+* @returns Promise<string>
 */
-  uploadAttachment(tempFilePath: string, fileName?: string, body?: Record<string, string | number>, task?: (task: WechatMiniprogram.UploadTask) => void, timeout?: number): Promise<TDiscuzXAttachment> {
-    return super.upload<TDiscuzXAttachment>("attachments", tempFilePath, fileName, body, task, timeout);
+  uploadAttachment(tempFilePath: string, fileName?: string, body?: Record<string, string | number>, task?: (task: WechatMiniprogram.UploadTask) => void, timeout?: number): Promise<string> {
+    return super.upload<string>("attachments", tempFilePath, fileName, body, task, timeout);
+  }
+  deleteAttachment(attachId: string) {
+    return this.delete<number>(`attachments/${attachId}`);
+  }
+  getAttachment(attachId: string): Promise<string> {
+    return this.get<string>(`attachments/${attachId}`);
+  }
+  genAttachmentPreviewURL(attachId: string, width: number = null, height: number = null, radio: number = null): string {
+    const SizeQuerys = [];
+    if (width) {
+      SizeQuerys.push(`w=${width}`);
+    }
+    if (height) {
+      SizeQuerys.push(`h=${height}`);
+    }
+    if (radio) {
+      SizeQuerys.push(`r=${radio}`);
+    }
+
+    return `${this.getBaseURL}&uri=attachments/${attachId}/preview${SizeQuerys.length ? "&" + SizeQuerys.join("&") : ""}`;
+  }
+  genAttachmentDownloadURL(attachId: string): string {
+    return `${this.getBaseURL}&uri=attachments/${attachId}/download`;
   }
 }
 
