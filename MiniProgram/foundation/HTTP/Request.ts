@@ -53,6 +53,9 @@ export default class extends HTTP {
    */
   upload<ResponseData>(uri: string | number | (string | number)[] = null, tempFilePath: string, fileName: string = "file", body: Record<string, number | string> = {}, task: (task: WechatMiniprogram.UploadTask) => void = null, timeout: number = null): Promise<ResponseData> {
     this.header("X-Ajax", "1");
+    if (wx.getStorageSync("Ruyi_Token")) {
+      this.header("Authorization", `Bearer ${wx.getStorageSync("Ruyi_Token")}`);
+    }
 
     return new Promise((resolve, reject) => {
       const options: WechatMiniprogram.UploadFileOption = {
