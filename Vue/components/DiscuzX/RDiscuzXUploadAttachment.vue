@@ -1,31 +1,31 @@
 <template>
-  <RNaiveUpload :upload="uploadPostAttachment" :remove="removePostAttachment" />
+  <RNaiveUpload v-bind="$attrs" :upload="uploadPostAttachment" :remove="removePostAttachment" />
 </template>
 
 <script lang="ts" setup>
 import RNaiveUpload from '../Naive/RNaiveUpload.vue';
 import { UploadFileInfo } from 'naive-ui';
-import DiscuzXFilesApi from '../../api/discuzX/common/DiscuzXFilesApi';
+import { DiscuzXAttachmentsApi } from '../../api/discuzX/common/DiscuzXAttachmentsApi';
 
 const Props = defineProps<{
   action: string
 }>();
 
-DiscuzXFilesApi.url(Props.action);
+const AApi = new DiscuzXAttachmentsApi(Props.action);
 
 function uploadPostAttachment(file: UploadFileInfo): Promise<UploadFileInfo> {
-  return DiscuzXFilesApi.uploadFile(file.file).then(res => {
+  return AApi.uploadAttachment(file.file).then(res => {
     return {
-      id: res.fileId,
-      name: res.sourceFileName,
+      id: res.toString(),
+      name: file.file.name,
       status: "finished",
-      url: res.link
+      url: AApi.genAttachmentPreviewURL(res)
     };
   });
 }
 
 function removePostAttachment(file: UploadFileInfo) {
-  return DiscuzXFilesApi.deleteFile(file.id).then(_ => {
+  return AApi.deleteAttachment(file.id).then(_ => {
     return true;
   });
 }
