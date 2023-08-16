@@ -1,6 +1,6 @@
 //* 事件总线、任务巴士
 
-type TSubscribers = Map<string, (...params: unknown[]) => void>;
+type TSubscribers = Map<string, (...params: any[]) => void>;
 
 const List: Map<string, TSubscribers> = new Map();
 
@@ -43,7 +43,7 @@ export default {
       }
     }
   },
-  once(name: string, callback: (...params: unknown[]) => void): void {
+  once(name: string, callback: (...params: any[]) => void): void {
     if (!List.has(name)) {
       List.set(name, new Map());
     }

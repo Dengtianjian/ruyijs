@@ -1,5 +1,20 @@
 import DiscuzXRequest from "../../foundation/HTTP/DiscuzXRequest";
 
+export type TMPDiscuzXAttachment = {
+  id: number,
+  attachId: string,
+  extension: string,
+  fileName: string,
+  filePath: string,
+  width: number,
+  height: number,
+  remote: boolean,
+  sourceFileName: string,
+  userId: number,
+  previewURL?: string,
+  downloadURL?: string
+};
+
 export class DiscuzXAttachmentsApi extends DiscuzXRequest {
   /**
 * 上传文件
