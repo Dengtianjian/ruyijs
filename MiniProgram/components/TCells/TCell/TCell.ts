@@ -19,6 +19,10 @@ Component<{}, {
   link: {
     type: BooleanConstructor,
     value: boolean
+  },
+  url: {
+    type: StringConstructor,
+    value: string
   }
   clickable: {
     type: BooleanConstructor,
@@ -72,6 +76,10 @@ Component<{}, {
       type: Boolean,
       value: false
     },
+    url: {
+      type: String,
+      value: null
+    },
     clickable: {
       type: Boolean,
       value: false
@@ -102,6 +110,11 @@ Component<{}, {
    */
   methods: {
     tapHeader() {
+      if (this.properties.url) {
+        wx.navigateTo({
+          url: this.properties.url
+        });
+      }
       this.triggerEvent("header");
     },
     tapTitle() {

@@ -32,13 +32,7 @@ Component({
     },
     show: {
       type: Boolean,
-      value: false,
-      observer(newV) {
-        if (newV === this.data.showModal) return;
-        this.setData({
-          showModal: newV
-        })
-      }
+      value: false
     },
     closeButton: {
       type: Boolean,
@@ -66,7 +60,6 @@ Component({
    * 组件的初始数据
    */
   data: {
-    showModal: false,
     bodyHeight: "100%"
   },
 
@@ -83,10 +76,11 @@ Component({
     closeDrawer() {
       if (this.properties.maskClose) {
         this.setData({
-          showModal: false
+          show: false
         });
       }
       this.triggerEvent("mask");
+      this.triggerEvent("update", this.data.show);
     },
     updateBodyHeight() {
       this.createSelectorQuery().select(".r-drawer").boundingClientRect(Drawer => {
@@ -96,11 +90,6 @@ Component({
           });
         }).exec();
       }).exec();
-    }
-  },
-  observers: {
-    showModal(newV) {
-      this.triggerEvent("update", newV);
     }
   }
 })
