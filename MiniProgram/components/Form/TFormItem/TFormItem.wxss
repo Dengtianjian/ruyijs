@@ -34,12 +34,22 @@
   flex-grow: 1;
   display: flex;
   align-items: center;
+  column-gap: 8rpx;
   /* min-height: 88rpx; */
   line-height: 28rpx;
   font-size: 28rpx;
   word-break: break-all;
   box-sizing: border-box;
   border-radius: var(--radius-angle);
+}
+
+.t-form-prefix,
+.t-form-suffix {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .t-form-item_plain .t-form-content {
