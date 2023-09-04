@@ -4,7 +4,13 @@
     <text wx:if="{{ label }}">{{ label }}</text>
   </view>
   <view class="t-form-content">
+    <view class="t-form-prefix">
+      <slot name="prefix" />
+    </view>
     <slot />
+    <view class="t-form-suffix">
+      <slot name="suffix" />
+    </view>
   </view>
   <view class="t-form-prompt">
     <slot name="prompt" />

@@ -1,4 +1,4 @@
-import DiscuzXRequest from "../../../foundation/HTTP/DiscuzXRequest";
+import DiscuzXRequest from "../../../foundation/HTTP/discuzXRequest";
 
 type TAttachment = {
   aid: number,
@@ -11,7 +11,7 @@ type TAttachment = {
   thumbURL: string
 }
 
-class AttachmentsApi extends DiscuzXRequest {
+class AttachmentApi extends DiscuzXRequest {
   uploadAttachment(file: File, body: Record<string, string> = {}, fileName: string = "file") {
     return this.upload<TAttachment>(null, file, fileName, body);
   }
@@ -23,4 +23,4 @@ class AttachmentsApi extends DiscuzXRequest {
   }
 }
 
-export default new AttachmentsApi("attachments");
+export default new AttachmentApi("attachment");

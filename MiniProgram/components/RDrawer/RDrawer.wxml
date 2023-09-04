@@ -1,5 +1,5 @@
-<t-modal show="{{ showModal }}" inside="{{ inside }}" zIndex="{{ zIndex }}" position="{{ position }}" bind:mask="closeDrawer">
-  <view class="r-drawer" style="width:{{ width }};height:{{ height }}" >
+<t-modal model:show="{{ show }}" inside="{{ inside }}" zIndex="{{ zIndex }}" position="{{ position }}" bind:mask="closeDrawer">
+  <view class="r-drawer" style="width:{{ width }};height:{{ height }}">
     <view class="r-drawer-header">
       <view class="r-drawer-left">
         <slot name="left" />

@@ -1,5 +1,5 @@
 import { TBody, TMethods } from ".";
-import Request from "./Request";
+import Request from "./request";
 
 export default class extends Request {
   send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<ResponseData> {
