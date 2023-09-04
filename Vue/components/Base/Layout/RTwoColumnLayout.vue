@@ -4,9 +4,9 @@
       <RRouterMenu :options="menuOptions"></RRouterMenu>
     </n-layout-sider>
     <n-layout-content style="background-color:transparent;">
-      <panel>
+      <RPanel style="margin:20px;">
         <KeepAliveRouterView />
-      </panel>
+      </RPanel>
       <CommonFooter />
     </n-layout-content>
   </n-layout>
@@ -20,6 +20,7 @@ import { RTMenuOption } from '../../../types/components/Common';
 import CommonFooter from '../RCommonFooter.vue';
 import KeepAliveRouterView from '../RKeepAliveRouterView.vue';
 import RRouterMenu from '../RRouterMenu.vue';
+import RPanel from '../RPanel.vue';
 
 defineProps<{
   menuOptions: Array<RTMenuOption>

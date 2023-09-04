@@ -1,6 +1,7 @@
 <template>
-  <div class="r-space" :style={ justifyContent:justify,alignItems:align,flexWrap:wrap,gap,columnGap:rowGap }>
-    <slot />ƒ
+  <div class="r-space"
+    :style="[gap ? { gap } : { columnGap, rowGap }, { justifyContent: justify, alignItems: align, flexWrap: wrap }]">
+    <slot />
   </div>
 </template>
 
@@ -16,15 +17,14 @@ withDefaults(defineProps<{
   justify: "start",
   align: "start",
   warp: "nowrap",
-  gap: "unset",
-  rowGap: "unset",
-  columnGap: 'unset'
+  gap: "",
+  rowGap: "",
+  columnGap: ''
 });
 </script>
 
 <style scoped>
 .r-space {
   display: flex;
-
 }
 </style>

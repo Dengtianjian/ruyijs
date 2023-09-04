@@ -28,7 +28,7 @@ class FilesApi extends DiscuzXRequest {
     return this.delete(`files/${fileId}`);
   }
   genFileLink(fileId: string): string {
-    return `${this.requestURL}&uri=files/${fileId}`;
+    return `${this.requestURL}&uri=files/${fileId}.png`;
   }
 }
 
