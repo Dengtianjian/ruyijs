@@ -44,6 +44,10 @@ export default class HTTP {
   get requestURL() {
     return this.#baseURL;
   }
+  #prefix: string | number | (number | string)[] = null;
+  get requestPrefix() {
+    return this.#prefix;
+  }
   #method: TMethods = "GET";
   /**
    * 获取请求方式
@@ -111,6 +115,14 @@ export default class HTTP {
    */
   url(baseURl: string) {
     this.#baseURL = baseURl;
+    return this;
+  }
+  /**
+   * 设置前缀
+   * @param value 前缀值
+   */
+  prefix(value: string | number | (number | string)[]): this {
+    this.#prefix = value;
     return this;
   }
   /**
@@ -233,7 +245,24 @@ export default class HTTP {
       this.#body = JSON.stringify(this.#body);
     }
 
-    const URL = HTTP.genURL(this.#baseURL, uri, this.#query);
+    const URIs = [];
+    if (uri) {
+      if (!Array.isArray(uri)) {
+        URIs.push(uri);
+      } else {
+        URIs.push(...uri);
+      }
+
+      if (this.#prefix) {
+        if (Array.isArray(this.#prefix)) {
+          URIs.unshift(...this.#prefix);
+        } else {
+          URIs.unshift(this.#prefix);
+        }
+      }
+    }
+
+    const URL = HTTP.genURL(this.#baseURL, URIs, this.#query);
 
     if (method !== "GET") {
       // @ts-ignore
@@ -241,18 +270,23 @@ export default class HTTP {
     }
 
     return new Promise<IResponse<ResponseData>>((resolve, reject) => {
+      if (this.#beforeInterceptor.length) {
+        this.#beforeInterceptor.forEach(item => {
+          item();
+        });
+      }
       return fetch(URL, options).then(async res => {
         return {
           response: res,
           text: await res.text()
         }
-      }).then(({ response, text }) => {
+      }).then(async ({ response, text }) => {
         const header: Record<string, string> = {};
         response.headers.forEach((val, key) => {
           header[key] = val;
         });
 
-        const Response: IResponse<ResponseData> = {
+        let Response: IResponse<ResponseData> = {
           code: response.status,
           message: "ok",
           data: null,
@@ -278,6 +312,12 @@ export default class HTTP {
           Response['data'] = text;
         }
 
+        if (this.#afterInterceptor.length) {
+          for await (const item of this.#afterInterceptor) {
+            Response = await item(response.status, header, Response);
+          }
+        }
+
         if (Response.error) {
           reject(Response);
         } else {
@@ -295,6 +335,16 @@ export default class HTTP {
         this.#options = {};
       })
     });
+  }
+  #beforeInterceptor: Array<() => void> = [];
+  #afterInterceptor: Array<(statusCode: number, header: Record<string, string>, data: IResponse<any>) => Promise<IResponse<any>>> = [];
+  before(interceptor: () => void) {
+    this.#beforeInterceptor.push(interceptor);
+    return this;
+  }
+  after<T extends Record<string, any>>(interceptor: (statusCode: number, header: Record<string, string>, data: IResponse<T>) => Promise<IResponse<any>>) {
+    this.#afterInterceptor.push(interceptor);
+    return this;
   }
   /**
    * 发送GET请求

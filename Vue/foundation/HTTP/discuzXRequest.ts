@@ -3,8 +3,27 @@ import Request from "./request";
 
 export default class extends Request {
   send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<ResponseData> {
+
+    let URIs = [];
+    if (uri) {
+      if (Array.isArray(uri)) {
+        URIs.push(...uri);
+      } else {
+        URIs.push(uri);
+      }
+
+      if (this.requestPrefix) {
+        if (Array.isArray(this.requestPrefix)) {
+          URIs.unshift(...this.requestPrefix);
+        } else {
+          URIs.unshift(this.requestPrefix);
+        }
+      }
+    }
     uri = Array.isArray(uri) ? uri.join("/") : uri.toString();
-    this.query("uri", uri);
+
+    this.query("uri", URIs ? URIs.join("/") : "/");
+
     return super.send<ResponseData>(null, method);
   }
   /**
