@@ -1,6 +1,7 @@
 <template>
-  <div class="r-space" :style={ justifyContent:justify,alignItems:align,flexWrap:wrap,gap,columnGap:rowGap }>
-    <slot />ƒ
+  <div class="r-space"
+    :style="`justify-content:${justify};align-items:${align};flex-wrap:${wrap};gap:${gap};column-gap:${columnGap};row-gap:${rowGap}`">
+    <slot />
   </div>
 </template>
 
