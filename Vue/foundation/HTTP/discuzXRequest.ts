@@ -11,16 +11,15 @@ export default class extends Request {
       } else {
         URIs.push(uri);
       }
+    }
 
-      if (this.requestPrefix) {
-        if (Array.isArray(this.requestPrefix)) {
-          URIs.unshift(...this.requestPrefix);
-        } else {
-          URIs.unshift(this.requestPrefix);
-        }
+    if (this.requestPrefix) {
+      if (Array.isArray(this.requestPrefix)) {
+        URIs.unshift(...this.requestPrefix);
+      } else {
+        URIs.unshift(this.requestPrefix);
       }
     }
-    uri = Array.isArray(uri) ? uri.join("/") : uri.toString();
 
     this.query("uri", URIs ? URIs.join("/") : "/");
 
@@ -37,6 +36,7 @@ export default class extends Request {
         this.query(key, query[key]);
       }
     }
+
     return this.send<ResponseData>(uri, "GET");
   }
   /**

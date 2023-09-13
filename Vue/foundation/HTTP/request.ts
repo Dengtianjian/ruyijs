@@ -1,6 +1,20 @@
+import { TBody } from "@/Ruyi/MiniProgram/foundation/HTTP/HTTP";
 import HTTP, { TMethods } from ".";
 
 export default class Request extends HTTP {
+  /**
+ * 构建HTTP实例
+ * @param prefix 前缀
+ * @param baseURL 基URL
+ * @param method 请求方式
+ * @param query 查询参数
+ * @param body 请求体
+ * @param pipes 数据管道
+ */
+  constructor(prefix: string = null, baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}) {
+    super(baseURL, method, query, body, pipes, options);
+    this.prefix(prefix);
+  }
   /**
    * 处理鉴权Token
    * @param headers 响应头
