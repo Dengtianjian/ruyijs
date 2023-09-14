@@ -92,8 +92,9 @@ export default class HTTP {
    * @param query 查询参数
    * @param body 请求体
    * @param pipes 数据管道
+   * @param headers 请求头
    */
-  constructor(baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}) {
+  constructor(baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}, headers: Record<string, string> = {}) {
     this.#baseURL = baseURL;
     this.#method = method;
     for (const key in query) {
@@ -107,6 +108,7 @@ export default class HTTP {
     this.#body = body;
     this.#pipes = pipes;
     this.#options = options;
+    this.#headers = headers;
   }
   /**
    * 设置请求根地址

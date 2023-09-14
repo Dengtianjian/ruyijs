@@ -11,8 +11,8 @@ export default class Request extends HTTP {
  * @param body 请求体
  * @param pipes 数据管道
  */
-  constructor(prefix: string = null, baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}) {
-    super(baseURL, method, query, body, pipes, options);
+  constructor(prefix: string = null, baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}, headers: Record<string, string> = {}) {
+    super(baseURL, method, query, body, pipes, options, headers);
     this.prefix(prefix);
   }
   /**
