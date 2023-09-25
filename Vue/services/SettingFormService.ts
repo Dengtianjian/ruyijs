@@ -8,19 +8,20 @@ export default class <T extends object> {
   disabled = ref<boolean>(false);
   // @ts-ignore
   settings = reactive<T>({});
-  constructor(defaultValues: T = null) {
+  constructor(defaultValues: T) {
     if (defaultValues) {
       this.settings = reactive(defaultValues);
     }
   }
 
-  load(keys: string[]) {
+  load() {
     this.loading.value = true;
-    return SettingsApi.list<T>(keys).then(settings => {
+    return SettingsApi.list<T>(Object.keys(this.settings)).then(settings => {
       for (const key in settings) {
         // @ts-ignore
         this.settings[key] = settings[key];
       }
+      return settings;
     }).finally(() => {
       this.loading.value = false;
     });

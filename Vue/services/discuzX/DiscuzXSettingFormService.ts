@@ -4,18 +4,19 @@ import SettingFormService from "../SettingFormService";
 
 export default class <T extends Record<string, any>> extends SettingFormService<T> {
   #apiInstance: DiscuzXSettingsApi = null;
-  constructor(apiReuqestBaseURL?: string, defaultValue: T = null) {
+  constructor(apiReuqestBaseURL: string, defaultValue: T) {
     super(defaultValue);
     this.#apiInstance = new DiscuzXSettingsApi("settings", apiReuqestBaseURL);
   }
-  load(keys: string[]) {
+  load() {
     this.loading.value = true;
-    return this.#apiInstance.list<T>(keys).then(settings => {
+    return this.#apiInstance.list<T>(Object.keys(this.settings)).then(settings => {
 
       for (const key in settings) {
         // @ts-ignore
         this.settings[key] = settings[key];
       }
+      return settings;
 
     }).finally(() => {
       this.loading.value = false;
