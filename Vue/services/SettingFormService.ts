@@ -6,7 +6,8 @@ export default class <T extends object> {
   loading = ref<boolean>(false);
   saving = ref<boolean>(false);
   disabled = ref<boolean>(false);
-  settings = reactive<T>(null);
+  // @ts-ignore
+  settings = reactive<T>({});
   constructor(defaultValues: T = null) {
     if (defaultValues) {
       this.settings = reactive(defaultValues);
