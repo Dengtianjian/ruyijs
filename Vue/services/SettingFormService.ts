@@ -1,22 +1,24 @@
-import { reactive, ref } from "vue"
-import Request from "../foundation/HTTP/Request";
+import { UnwrapNestedRefs, reactive, ref } from "vue"
 import SettingsApi from "../api/common/SettingsApi";
-
 
 
 export default class <T extends object> {
   loading = ref<boolean>(false);
   saving = ref<boolean>(false);
   disabled = ref<boolean>(false);
-  // @ts-ignore
-  settings = reactive<T>({});
+  settings = reactive<T>(null);
+  constructor(defaultValues: T = null) {
+    if (defaultValues) {
+      this.settings = reactive(defaultValues);
+    }
+  }
 
   load(keys: string[]) {
     this.loading.value = true;
     return SettingsApi.list<T>(keys).then(settings => {
-      for (const key in settings.data) {
+      for (const key in settings) {
         // @ts-ignore
-        this.settings[key] = settings.data[key];
+        this.settings[key] = settings[key];
       }
     }).finally(() => {
       this.loading.value = false;

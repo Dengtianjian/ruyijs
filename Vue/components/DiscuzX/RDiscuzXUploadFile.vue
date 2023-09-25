@@ -1,5 +1,5 @@
 <template>
-  <RNaiveUpload :upload="uploadPostAttachment" :remove="removePostAttachment" />
+  <RNaiveUpload :upload-file="uploadPostAttachment" :remove-file="removePostAttachment" />
 </template>
 
 <script lang="ts" setup>

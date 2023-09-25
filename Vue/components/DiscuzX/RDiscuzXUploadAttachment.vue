@@ -1,5 +1,5 @@
 <template>
-  <RNaiveUpload v-bind="$attrs" :upload="uploadPostAttachment" :remove="removePostAttachment" />
+  <RNaiveUpload v-bind="$attrs" :upload-file="uploadPostAttachment" :remove-file="removePostAttachment" />
 </template>
 
 <script lang="ts" setup>
@@ -11,7 +11,7 @@ const Props = defineProps<{
   action: string
 }>();
 
-const AApi = new DiscuzXAttachmentsApi(Props.action);
+const AApi = new DiscuzXAttachmentsApi(null, Props.action);
 
 function uploadPostAttachment(file: UploadFileInfo): Promise<UploadFileInfo> {
   return AApi.uploadAttachment(file.file).then(res => {

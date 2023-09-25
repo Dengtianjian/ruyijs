@@ -1,4 +1,4 @@
-import DiscuzXRequest from "../../../foundation/HTTP/DiscuzXRequest";
+import DiscuzXRequest from "../../../foundation/HTTP/discuzXRequest";
 
 export class DiscuzXAttachmentsApi extends DiscuzXRequest {
   uploadAttachment(file: File): Promise<string> {
