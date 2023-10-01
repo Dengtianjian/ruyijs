@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import { computed, PropType, ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter, useRoute, RouteLocationNormalizedLoaded } from 'vue-router';
 import helper from '../../foundation/helper';
 import naiveUIService from '../../services/naiveUIService';
 import { RTMenuOption } from '../../types/components/Common';
@@ -20,17 +20,21 @@ const Route = useRoute();
 
 const DefaultSelectedMenu = ref<string>(Route.name.toString());
 Router.beforeResolve((to, from, next) => {
-  getActiveMenuName(to.name.toString());
+  getActiveMenuName(menuOptions.value, to);
   next();
 });
 
-function getActiveMenuName(RouteName: string = Route.name.toString()) {
-  const HitMenu = menuOptions.value.find(item => {
-    if (item.key.toString() === RouteName) return item;
-    if (item.childrenNames && item.childrenNames.includes(RouteName)) return item;
-    return false;
-  });
-  DefaultSelectedMenu.value = HitMenu ? HitMenu.key.toString() : RouteName;
+function getActiveMenuName(menuOptions: RTMenuOption[], CurrentRoute: RouteLocationNormalizedLoaded = Route) {
+  let hitMenu = null;
+  for (const item of menuOptions) {
+    if (item.type && item.type === 'group') continue;
+
+    if (item.childrenNames && item.childrenNames.includes(CurrentRoute.name.toString())) {
+      hitMenu = item;
+    }
+  }
+
+  DefaultSelectedMenu.value = hitMenu ? hitMenu.key.toString() : CurrentRoute.name.toString();
 }
 
 function transform(menus: RTMenuOption[]): RTMenuOption[] {
@@ -55,8 +59,7 @@ function transform(menus: RTMenuOption[]): RTMenuOption[] {
 const menuOptions = computed<RTMenuOption[]>(() => {
   return transform(Props.options);
 });
-getActiveMenuName();
-
+getActiveMenuName(menuOptions.value);
 </script>
 
 <style scoped></style>
