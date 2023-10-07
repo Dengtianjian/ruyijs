@@ -1,5 +1,5 @@
 <template>
-  <RNaiveUpload :upload="uploadPostAttachment" :remove="removePostAttachment" v-bind="$attrs" />
+  <RNaiveUpload :upload-file="uploadPostAttachment" :remove-file="removePostAttachment" />
 </template>
 
 <script lang="ts" setup>
@@ -8,13 +8,14 @@ import { UploadFileInfo } from 'naive-ui';
 import DiscuzXFilesApi from '../../api/discuzX/common/DiscuzXFilesApi';
 
 const Props = defineProps<{
-  action: string
+  action: string,
+  auth?: boolean
 }>();
 
 DiscuzXFilesApi.url(Props.action);
 
 function uploadPostAttachment(file: UploadFileInfo): Promise<UploadFileInfo> {
-  return DiscuzXFilesApi.uploadFile(file.file).then(res => {
+  return DiscuzXFilesApi.query("auth", Props.auth === undefined ? true : Props.auth).uploadFile(file.file).then(res => {
     return {
       id: res.fileId,
       name: res.sourceFileName,

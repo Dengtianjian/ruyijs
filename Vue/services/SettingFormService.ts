@@ -1,5 +1,6 @@
-import { UnwrapNestedRefs, reactive, ref, toRaw } from "vue"
+import { UnwrapNestedRefs, reactive, ref } from "vue"
 import SettingsApi from "../api/common/SettingsApi";
+
 
 export default class <T extends object> {
   loading = ref<boolean>(false);
@@ -7,14 +8,18 @@ export default class <T extends object> {
   disabled = ref<boolean>(false);
   // @ts-ignore
   settings = reactive<T>({});
+  constructor(defaultValues: T) {
+    if (defaultValues) {
+      this.settings = reactive(defaultValues);
+    }
+  }
 
-  load(keys: string[]): Promise<T> {
+  load() {
     this.loading.value = true;
-    // @ts-ignore
-    return SettingsApi.list<T>(keys).then(settings => {
-      for (const key in settings.data) {
+    return SettingsApi.list<T>(Object.keys(this.settings)).then(settings => {
+      for (const key in settings) {
         // @ts-ignore
-        this.settings[key] = settings.data[key];
+        this.settings[key] = settings[key];
       }
       return settings;
     }).finally(() => {

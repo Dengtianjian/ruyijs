@@ -16,7 +16,7 @@ type TUploadResult = {
   accessURL: string,
 }
 
-class FilesApi extends DiscuzXRequest {
+class DiscuzXFilesApi extends DiscuzXRequest {
   uploadFile(file: File, body: Record<string, string> = {}, fileName: string = "file"): Promise<TUploadResult> {
     return this.upload<TUploadResult>("files", file, fileName, body).then(res => {
       res.link = `${this.requestURL}&uri=files/${res.fileId}`;
@@ -32,4 +32,4 @@ class FilesApi extends DiscuzXRequest {
   }
 }
 
-export default new FilesApi();
+export default new DiscuzXFilesApi();

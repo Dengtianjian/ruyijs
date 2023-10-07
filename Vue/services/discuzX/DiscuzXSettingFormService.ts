@@ -1,12 +1,17 @@
-import { UnwrapNestedRefs, reactive, ref } from "vue"
-import DiscuzXSettingsApi from "../../api/discuzX/common/DiscuzXSettingsApi";
+import { reactive, ref } from "vue"
+import { DiscuzXSettingsApi } from "../../api/discuzX/common/DiscuzXSettingsApi";
 import SettingFormService from "../SettingFormService";
 
 export default class <T extends Record<string, any>> extends SettingFormService<T> {
-
-  load(keys: string[]): Promise<T> {
+  #apiInstance: DiscuzXSettingsApi = null;
+  constructor(apiReuqestBaseURL: string, defaultValue: T) {
+    super(defaultValue);
+    this.#apiInstance = new DiscuzXSettingsApi("settings", apiReuqestBaseURL);
+  }
+  load() {
     this.loading.value = true;
-    return DiscuzXSettingsApi.list<T>(keys).then(settings => {
+    return this.#apiInstance.list<T>(Object.keys(this.settings)).then(settings => {
+
       for (const key in settings) {
         // @ts-ignore
         this.settings[key] = settings[key];
@@ -16,11 +21,10 @@ export default class <T extends Record<string, any>> extends SettingFormService<
       this.loading.value = false;
     });
   }
-
-  save(dataHandle: (data?: UnwrapNestedRefs<T>) => T): Promise<any> {
+  save() {
     this.saving.value = true;
     this.disabled.value = true;
-    return DiscuzXSettingsApi.saveList(dataHandle ? dataHandle(this.settings) : this.settings).finally(() => {
+    return this.#apiInstance.saveList(this.settings).finally(() => {
       this.saving.value = false;
       this.disabled.value = false;
     });

@@ -1,6 +1,20 @@
+import { TBody } from "@/Ruyi/MiniProgram/foundation/HTTP/HTTP";
 import HTTP, { TMethods } from ".";
 
 export default class Request extends HTTP {
+  /**
+ * 构建HTTP实例
+ * @param prefix 前缀
+ * @param baseURL 基URL
+ * @param method 请求方式
+ * @param query 查询参数
+ * @param body 请求体
+ * @param pipes 数据管道
+ */
+  constructor(prefix: string = null, baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}, headers: Record<string, string> = {}) {
+    super(baseURL, method, query, body, pipes, options, headers);
+    this.prefix(prefix);
+  }
   /**
    * 处理鉴权Token
    * @param headers 响应头
@@ -38,6 +52,58 @@ export default class Request extends HTTP {
       this.#tokenHandle(res.header);
       return res.data;
     });
+  }
+  get<ResponseData>(uri: string | string[], query: Record<string, number | string> = null) {
+    if (query) {
+      for (const key in query) {
+        this.query(key, query[key]);
+      }
+    }
+    return this.send<ResponseData>(uri, "GET");
+  }
+  /**
+  * 发送POST请求
+  * @param uri URI
+  * @returns Promise
+  */
+  post<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
+    return this.send<ResponseData>(uri, "POST");
+  }
+  /**
+   * 发送PUT请求
+   * @param uri URI
+   * @returns Promise
+   */
+  put<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
+    return this.send<ResponseData>(uri, "PUT");
+  }
+  /**
+   * 发送delete请求
+   * @param uri URI
+   * @returns Promise
+   */
+  delete<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
+    return this.send<ResponseData>(uri, "DELETE");
+  }
+  /**
+   * 发送patch请求
+   * @param uri URI
+   * @returns Promise
+   */
+  patch<ResponseData>(uri: string | string[], bodyData: TBody = null) {
+    if (bodyData) {
+      this.body(bodyData);
+    }
+    return this.send<ResponseData>(uri, "PATCH");
   }
   /**
    * 上传文件

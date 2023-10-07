@@ -1,22 +1,20 @@
-import DiscuzXRequest from "../../../foundation/HTTP/DiscuzXRequest";
+import DiscuzXRequest from "../../../foundation/HTTP/discuzXRequest";
 
 
-class SettingsApi extends DiscuzXRequest {
+export class DiscuzXSettingsApi extends DiscuzXRequest {
   list<T>(keys: string[]) {
-    return this.get<T>("settings/list", {
-      keys: keys.join(",")
+    return this.get<T>(null, {
+      name: keys.join(",")
     });
   }
   saveList(KeyValues: Record<string, any>) {
-    return this.patch<number>("settings/list", {
-      data: KeyValues
-    });
+    return this.patch<number>(null, KeyValues);
   }
   save(key: string, value: any) {
-    return this.patch<number>(`settings/${key}`, {
+    return this.patch<number>(key, {
       value
     });
   }
 }
 
-export default new SettingsApi();
+export default new DiscuzXSettingsApi("settings");
