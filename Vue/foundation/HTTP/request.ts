@@ -1,4 +1,4 @@
-import { TBody } from "@/Ruyi/MiniProgram/foundation/HTTP/HTTP";
+import { TBody } from "./";
 import HTTP, { TMethods } from ".";
 
 export default class Request extends HTTP {

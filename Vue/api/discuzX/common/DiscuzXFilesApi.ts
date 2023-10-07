@@ -1,4 +1,4 @@
-import DiscuzXRequest from "../../../foundation/HTTP/DiscuzXRequest";
+import DiscuzXRequest from "../../../foundation/HTTP/discuzXRequest";
 
 type TUploadResult = {
   accessPath: string,
@@ -16,7 +16,7 @@ type TUploadResult = {
   accessURL: string,
 }
 
-class DiscuzXFilesApi extends DiscuzXRequest {
+export class DiscuzXFilesApi extends DiscuzXRequest {
   uploadFile(file: File, body: Record<string, string> = {}, fileName: string = "file"): Promise<TUploadResult> {
     return this.upload<TUploadResult>("files", file, fileName, body).then(res => {
       res.link = `${this.requestURL}&uri=files/${res.fileId}`;

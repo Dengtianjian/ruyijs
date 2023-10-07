@@ -1,4 +1,4 @@
-import { reactive, ref } from "vue"
+import { UnwrapNestedRefs, reactive, ref } from "vue"
 import { DiscuzXSettingsApi } from "../../api/discuzX/common/DiscuzXSettingsApi";
 import SettingFormService from "../SettingFormService";
 
@@ -21,10 +21,10 @@ export default class <T extends Record<string, any>> extends SettingFormService<
       this.loading.value = false;
     });
   }
-  save() {
+  save(dataHandler?: (data: UnwrapNestedRefs<T>) => T) {
     this.saving.value = true;
     this.disabled.value = true;
-    return this.#apiInstance.saveList(this.settings).finally(() => {
+    return this.#apiInstance.saveList(dataHandler ? dataHandler(this.settings) : this.settings).finally(() => {
       this.saving.value = false;
       this.disabled.value = false;
     });
