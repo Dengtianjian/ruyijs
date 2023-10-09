@@ -11,6 +11,7 @@ export type TMPDiscuzXAttachment = {
   remote: boolean,
   sourceFileName: string,
   userId: number,
+  url?: string,
   previewURL?: string,
   downloadURL?: string
 };
