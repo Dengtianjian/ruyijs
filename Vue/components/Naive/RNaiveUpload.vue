@@ -14,8 +14,8 @@ const Props = withDefaults(defineProps<{
   files?: Array<UploadFileInfo>,
   file?: UploadFileInfo,
   single?: boolean,
-  upload: (file: UploadFileInfo) => Promise<string | UploadFileInfo>
-  remove: (file: UploadFileInfo) => Promise<boolean>
+  uploadFile: (file: UploadFileInfo) => Promise<string | UploadFileInfo>
+  removeFile: (file: UploadFileInfo) => Promise<boolean>
 }>(), {
   files: null,
   file: null,
@@ -33,7 +33,7 @@ const Emits = defineEmits(["update:file", "update:files"]);
 
 function uploadFile({ file }: { file: UploadFileInfo, fileList: Array<UploadFileInfo>, event?: Event }) {
   if (file.file) {
-    Props.upload(file).then(res => {
+    Props.uploadFile(file).then(res => {
       if (typeof res === "string") {
         if (Props.single === true || Props.single === undefined) {
           FileList.splice(0, 1, {
@@ -68,21 +68,25 @@ function uploadFile({ file }: { file: UploadFileInfo, fileList: Array<UploadFile
 }
 
 function removeFile({ file }: { file: UploadFileInfo }) {
-  return Props.remove(file).then(_ => {
+  return Props.removeFile(file).then(_ => {
     FileList.splice(FileList.findIndex(item => {
       return item.id === file.id;
     }), 1);
     if (Props.single) {
       Emits("update:file", null);
+    } else {
+      Emits("update:files", FileList);
     }
     return true;
   }).catch(err => {
     if (err.statusCode === 404) {
       FileList.splice(FileList.findIndex(item => {
         return item.id === file.id;
-      }));
+      }), 1);
       if (Props.single) {
         Emits("update:file", null);
+      } else {
+        Emits("update:files", FileList);
       }
       return true;
     }

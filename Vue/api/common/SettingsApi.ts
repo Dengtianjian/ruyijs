@@ -1,4 +1,4 @@
-import Request from "../../foundation/HTTP/Request";
+import Request from "../../foundation/HTTP/request";
 
 class SettingsApi extends Request {
   list<T>(keys: string[]) {
@@ -7,7 +7,7 @@ class SettingsApi extends Request {
     });
   }
   saveList(KeyValues: Record<string, any>) {
-    return this.patch("list", {
+    return this.patch<number>("list", {
       data: KeyValues
     });
   }
