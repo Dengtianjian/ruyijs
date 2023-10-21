@@ -21,9 +21,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  column-gap: 20rpx;
   min-height: 64rpx;
   line-height: 28rpx;
   font-size: 28rpx;
+}
+
+.t-cell-left {
+  flex-shrink: 0;
 }
 
 .t-cell-title {
@@ -33,6 +38,7 @@
 .t-cell-content {
   color: #969799;
   font-size: 28rpx;
+  line-height: 1.4;
 }
 
 .t-cell-content_icon {

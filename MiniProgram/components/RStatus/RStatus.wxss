@@ -1,6 +1,8 @@
 /* Ruyi/MiniProgram/components/Rtatus/RStatus.wxss */
 
 .r-status {
+  --font-size: 28rpx;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,7 +10,7 @@
   padding: 8rpx 0;
   min-height: 100rpx;
   color: #999;
-  font-size: 28rpx;
+  font-size: var(--font-size);
   box-sizing: border-box;
 }
 

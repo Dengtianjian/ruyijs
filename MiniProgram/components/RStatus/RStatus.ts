@@ -37,6 +37,10 @@ Component({
       type: String,
       value: "#333"
     },
+    fontSize: {
+      type: String,
+      value: "28rpx"
+    },
     finished: {
       type: Boolean,
       value: false,
