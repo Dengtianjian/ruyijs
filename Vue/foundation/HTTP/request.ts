@@ -1,4 +1,4 @@
-import { TBody } from "./";
+import { TBody, THTTPMiddleware } from "./";
 import HTTP, { TMethods } from ".";
 
 export default class Request extends HTTP {
@@ -11,30 +11,9 @@ export default class Request extends HTTP {
  * @param body 请求体
  * @param pipes 数据管道
  */
-  constructor(prefix: string = null, baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}, headers: Record<string, string> = {}) {
-    super(baseURL, method, query, body, pipes, options, headers);
+  constructor(prefix: string = null, baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}, headers: Record<string, string> = {}, globalMiddlewares: Array<THTTPMiddleware> = []) {
+    super(baseURL, method, query, body, pipes, options, headers, globalMiddlewares);
     this.prefix(prefix);
-  }
-  /**
-   * 处理鉴权Token
-   * @param headers 响应头
-   */
-  #tokenHandle(headers: Record<string, string>): void {
-    if (headers['Authorization'] || headers['authorization']) {
-      const Auth: string = headers['Authorization'] || headers['authorization'];
-      if (Auth) {
-        const token: string = Auth.slice(0, Auth.lastIndexOf("/"));
-        const tokenExpiration: string = (Number(Auth.slice(Auth.lastIndexOf("/") + 1)) * 1000).toString();
-
-        if (!localStorage.getItem("Ruyi_Token") || localStorage.getItem("Ruyi_Token") !== token) {
-          localStorage.setItem("Ruyi_Token", token);
-          localStorage.setItem("Ruyi_TokenExpiration", tokenExpiration);
-        }
-      } else {
-        localStorage.removeItem("Ruyi_Token");
-        localStorage.removeItem("Ruyi_TokenExpiration");
-      }
-    }
   }
   /**
    * 发送请求
@@ -43,13 +22,7 @@ export default class Request extends HTTP {
    * @returns Promise
    */
   send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<ResponseData> {
-    this.header("X-Ajax", "1");
-    if (localStorage.getItem("Ruyi_Token")) {
-      this.header("Authorization", `Bearer ${localStorage.getItem("Ruyi_Token")}`);
-    }
-
     return super.send<ResponseData>(uri, method).then(res => {
-      this.#tokenHandle(res.header);
       return res.data;
     });
   }

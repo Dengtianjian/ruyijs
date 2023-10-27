@@ -1,7 +1,7 @@
 import { TBody, TMethods } from ".";
-import Request from "./request";
+import RuyiRequest from "./RuyiRequest";
 
-export default class extends Request {
+export default class extends RuyiRequest {
   send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<ResponseData> {
 
     let URIs = [];

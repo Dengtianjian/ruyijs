@@ -14,9 +14,9 @@ type HTTPResponse<ResponseData> = {
   version: string,
 }
 
-export interface IResponse<ResponseData> {
+export interface IResponse<ResponseData, ResponseHeader = Record<string, string>> {
   statusCode: number,
-  header: Record<string, string>,
+  header: ResponseHeader,
   cookies: string[],
   error: boolean,
   code: number | string,
@@ -35,6 +35,8 @@ export interface IPagination<Data> {
   }
   list: Data,
 }
+
+export type THTTPMiddleware<T = any, ResponseHeader extends Record<string, string> = Record<string, string>> = (http: HTTP, next: () => Promise<IResponse<T, ResponseHeader>>) => Promise<IResponse<T, ResponseHeader>>;
 
 export default class HTTP {
   #baseURL: string = null;
@@ -86,6 +88,11 @@ export default class HTTP {
   #options: RequestInit = {};
 
   /**
+   * 全局中间件
+   */
+  #globalMiddlewares: Array<THTTPMiddleware> = [];
+
+  /**
    * 构建HTTP实例
    * @param baseURL 基URL
    * @param method 请求方式
@@ -94,7 +101,7 @@ export default class HTTP {
    * @param pipes 数据管道
    * @param headers 请求头
    */
-  constructor(baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}, headers: Record<string, string> = {}) {
+  constructor(baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}, headers: Record<string, string> = {}, globalMiddlewares: Array<THTTPMiddleware> = []) {
     this.#baseURL = baseURL;
     this.#method = method;
     for (const key in query) {
@@ -109,6 +116,7 @@ export default class HTTP {
     this.#pipes = pipes;
     this.#options = options;
     this.#headers = headers;
+    this.#globalMiddlewares = globalMiddlewares;
   }
   /**
    * 设置请求根地址
@@ -176,6 +184,14 @@ export default class HTTP {
     this.#options[key] = value;
     return this;
   }
+
+  #scopedMiddlewares: Array<THTTPMiddleware> = [];
+  setMiddleware<T, ResponseHeader>(middleware: THTTPMiddleware<IResponse<T, ResponseHeader>>) {
+    this.#scopedMiddlewares.push(middleware);
+
+    return this;
+  }
+
   /**
    * 生成一个URL
    * @param baseURL 基URL
@@ -220,6 +236,82 @@ export default class HTTP {
     });
     uri = uri.filter(item => item.toString().trim());
     return [baseURL, ...uri].join("/") + `?${queryString}`;
+  }
+  fetch<ResponseData>(input: RequestInfo | URL, init?: RequestInit) {
+    return new Promise<IResponse<ResponseData>>((resolve, reject) => {
+      return fetch(input, init).then(async res => {
+        return {
+          response: res,
+          text: await res.text()
+        }
+      }).then(async ({ response, text }) => {
+        const header = {};
+        response.headers.forEach((val, key) => {
+          //@ts-ignore
+          header[key] = val;
+        });
+
+        let Response: IResponse<ResponseData> = {
+          code: response.status,
+          message: "ok",
+          data: null,
+          details: null,
+          statusCode: response.status,
+          header,
+          cookies: null,
+          version: null,
+          requiredTime: null,
+          error: response.status > 299
+        };
+
+        if (text && (header['Content-Type']?.includes("application/json") || header['content-type']?.includes("application/json"))) {
+          const ResponseBody: HTTPResponse<ResponseData> = JSON.parse(text);
+          Response['data'] = ResponseBody.data;
+          Response.code = ResponseBody.code;
+          Response.details = ResponseBody.details;
+          Response.message = ResponseBody.message;
+          Response.requiredTime = ResponseBody.requiredTime;
+          Response.version = ResponseBody.version;
+        } else {
+          // @ts-ignore
+          Response['data'] = text;
+        }
+
+        if (Response.error) {
+          reject(Response);
+        } else {
+          resolve(Response);
+        }
+      }).catch(reject).finally(() => {
+        this.#query = {};
+
+        this.#pipes = [];
+
+        this.#body = null;
+
+        this.#headers = {};
+
+        this.#options = {};
+
+        this.#scopedMiddlewares = [];
+      });
+    });
+  }
+  executeMiddleware<ResponseData>(Middlewares: Array<THTTPMiddleware<ResponseData>>, callback: () => Promise<IResponse<ResponseData>>) {
+    if (!Middlewares.length) return callback();
+
+    let next: () => Promise<IResponse<ResponseData>> = null;
+
+    const Top = Middlewares.pop();
+    if (Middlewares.length) {
+      next = () => {
+        return this.executeMiddleware(Middlewares, callback);
+      }
+    } else {
+      next = callback;
+    }
+
+    return Top(this, next);
   }
   /**
    * 发送请求
@@ -267,86 +359,12 @@ export default class HTTP {
     const URL = HTTP.genURL(this.#baseURL, URIs, this.#query);
 
     if (method !== "GET") {
-      // @ts-ignore
-      options['body'] = this.#body;
+      options['body'] = this.#body as BodyInit;
     }
 
-    return new Promise<IResponse<ResponseData>>((resolve, reject) => {
-      if (this.#beforeInterceptor.length) {
-        this.#beforeInterceptor.forEach(item => {
-          item();
-        });
-      }
-      return fetch(URL, options).then(async res => {
-        return {
-          response: res,
-          text: await res.text()
-        }
-      }).then(async ({ response, text }) => {
-        const header: Record<string, string> = {};
-        response.headers.forEach((val, key) => {
-          header[key] = val;
-        });
-
-        let Response: IResponse<ResponseData> = {
-          code: response.status,
-          message: "ok",
-          data: null,
-          details: null,
-          statusCode: response.status,
-          header,
-          cookies: null,
-          version: null,
-          requiredTime: null,
-          error: response.status > 299
-        };
-
-        if (text && (header['Content-Type']?.includes("application/json") || header['content-type']?.includes("application/json"))) {
-          const ResponseBody: HTTPResponse<ResponseData> = JSON.parse(text);
-          Response['data'] = ResponseBody.data;
-          Response.code = ResponseBody.code;
-          Response.details = ResponseBody.details;
-          Response.message = ResponseBody.message;
-          Response.requiredTime = ResponseBody.requiredTime;
-          Response.version = ResponseBody.version;
-        } else {
-          // @ts-ignore
-          Response['data'] = text;
-        }
-
-        if (this.#afterInterceptor.length) {
-          for await (const item of this.#afterInterceptor) {
-            Response = await item(response.status, header, Response);
-          }
-        }
-
-        if (Response.error) {
-          reject(Response);
-        } else {
-          resolve(Response);
-        }
-      }).catch(reject).finally(() => {
-        this.#query = {};
-
-        this.#pipes = [];
-
-        this.#body = null;
-
-        this.#headers = {};
-
-        this.#options = {};
-      })
+    return this.executeMiddleware<ResponseData>([...this.#globalMiddlewares, ...this.#scopedMiddlewares].reverse(), () => {
+      return this.fetch<ResponseData>(URL, options);
     });
-  }
-  #beforeInterceptor: Array<() => void> = [];
-  #afterInterceptor: Array<(statusCode: number, header: Record<string, string>, data: IResponse<any>) => Promise<IResponse<any>>> = [];
-  before(interceptor: () => void) {
-    this.#beforeInterceptor.push(interceptor);
-    return this;
-  }
-  after<T extends Record<string, any>>(interceptor: (statusCode: number, header: Record<string, string>, data: IResponse<T>) => Promise<IResponse<any>>) {
-    this.#afterInterceptor.push(interceptor);
-    return this;
   }
   /**
    * 发送GET请求
