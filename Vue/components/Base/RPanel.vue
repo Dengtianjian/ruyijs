@@ -1,6 +1,6 @@
 <template>
   <div class="panel">
-    <div class="panel-header">
+    <div class="panel-header" v-if="title || $slots.title || $slots.extra">
       <div class="panel-header-title">
         <slot name="title" />
         {{ title }}
@@ -9,7 +9,9 @@
         <slot name="extra" />
       </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" :style="{
+      marginTop: title || $slots.title || $slots.extra ? '10px' : 'unset'
+    }">
       <slot />
     </div>
   </div>
@@ -39,9 +41,5 @@ defineProps({
   font-size: 16px;
   color: var(--font-color_1);
   font-weight: bold;
-}
-
-.panel-body {
-  margin-top: 10px;
 }
 </style>
