@@ -346,13 +346,12 @@ export default class HTTP {
       } else {
         URIs.push(...uri);
       }
-
-      if (this.#prefix) {
-        if (Array.isArray(this.#prefix)) {
-          URIs.unshift(...this.#prefix);
-        } else {
-          URIs.unshift(this.#prefix);
-        }
+    }
+    if (this.#prefix) {
+      if (Array.isArray(this.#prefix)) {
+        URIs.unshift(...this.#prefix);
+      } else {
+        URIs.unshift(this.#prefix);
       }
     }
 

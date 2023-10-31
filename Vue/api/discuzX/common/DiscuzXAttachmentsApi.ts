@@ -10,7 +10,7 @@ export class DiscuzXAttachmentsApi extends DiscuzXRequest {
   getAttachment(attachId: string): Promise<string> {
     return this.get(`attachments/${attachId}`);
   }
-  genAttachmentPreviewURL(attachId: string, width: number = null, height: number = null, radio: number = null) {
+  genAttachmentPreviewURL(attachId: string, width: number | null = null, height: number | null = null, radio: number | null = null) {
     const SizeQuerys = [];
     if (width) {
       SizeQuerys.push(`w=${width}`);

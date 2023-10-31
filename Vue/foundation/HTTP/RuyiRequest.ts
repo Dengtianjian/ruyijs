@@ -25,7 +25,6 @@ export default class RuyiRequest extends Request {
     });
 
     super(prefix, baseURL, method, query, body, pipes, options, headers, globalMiddlewares);
-    this.prefix(prefix);
   }
   /**
    * 处理鉴权Token
