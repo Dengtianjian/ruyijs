@@ -51,6 +51,7 @@ export default class HTTP {
     return this.#prefix;
   }
   #method: TMethods = "GET";
+  #uri: string | number | (string | number)[] = null;
   /**
    * 获取请求方式
    */
@@ -79,11 +80,15 @@ export default class HTTP {
     return this.#pipes;
   }
   #headers: Record<string, string> = {};
+  #globalHeaders: Record<string, string> = {};
   /**
    * 获取请求头
    */
   get requestHeaders() {
-    return this.#headers;
+    return {
+      ...this.#headers,
+      ...this.#globalHeaders
+    };
   }
   #options: RequestInit = {};
 
@@ -115,7 +120,7 @@ export default class HTTP {
     this.#body = body;
     this.#pipes = pipes;
     this.#options = options;
-    this.#headers = headers;
+    this.#globalHeaders = headers;
     this.#globalMiddlewares = globalMiddlewares;
   }
   /**
@@ -237,8 +242,9 @@ export default class HTTP {
     uri = uri.filter(item => item.toString().trim());
     return [baseURL, ...uri].join("/") + `?${queryString}`;
   }
-  fetch<ResponseData>(input: RequestInfo | URL, init?: RequestInit) {
+  fetch<ResponseData>() {
     return new Promise<IResponse<ResponseData>>((resolve, reject) => {
+      const { input, init } = this.#resolveFecthParams(this.#uri, this.#method);
       return fetch(input, init).then(async res => {
         return {
           response: res,
@@ -313,20 +319,26 @@ export default class HTTP {
 
     return Top(this, next);
   }
-  /**
-   * 发送请求
-   * @param uri URI
-   * @param method 请求方式
-   * @returns Promise
-   */
-  send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<IResponse<ResponseData>> {
-    method = method ?? this.#method;
+  #resolveFecthParams(uri: string | number | (string | number)[] = null, method: TMethods = null): {
+    input: RequestInfo | URL,
+    init?: RequestInit
+  } {
+    this.#method = method = method ?? this.#method;
+    this.#uri = uri;
 
     if (this.#pipes.length) {
       this.query("_pipes", this.#pipes.join(","));
     }
 
-    const Headers = this.#headers;
+    const Headers = Object.assign({}, this.#headers, this.#globalHeaders);
+    for (const key in Headers) {
+      console.log(key, Headers[key]);
+
+    }
+    for (const key in this.#headers) {
+      console.log(key, this.#headers[key]);
+
+    }
 
     const options: RequestInit = Object.assign({
       headers: Headers,
@@ -361,8 +373,22 @@ export default class HTTP {
       options['body'] = this.#body as BodyInit;
     }
 
+    return {
+      input: URL,
+      init: options
+    }
+  }
+  /**
+   * 发送请求
+   * @param uri URI
+   * @param method 请求方式
+   * @returns Promise
+   */
+  send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<IResponse<ResponseData>> {
+    this.#uri = uri;
+    this.#method = method;
     return this.executeMiddleware<ResponseData>([...this.#globalMiddlewares, ...this.#scopedMiddlewares].reverse(), () => {
-      return this.fetch<ResponseData>(URL, options);
+      return this.fetch<ResponseData>();
     });
   }
   /**
