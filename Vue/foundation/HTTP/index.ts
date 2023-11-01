@@ -331,14 +331,6 @@ export default class HTTP {
     }
 
     const Headers = Object.assign({}, this.#headers, this.#globalHeaders);
-    for (const key in Headers) {
-      console.log(key, Headers[key]);
-
-    }
-    for (const key in this.#headers) {
-      console.log(key, this.#headers[key]);
-
-    }
 
     const options: RequestInit = Object.assign({
       headers: Headers,
