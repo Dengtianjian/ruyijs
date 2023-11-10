@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import { UploadFileInfo, useMessage } from 'naive-ui';
-import { reactive, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
 const NMessage = useMessage();
 
