@@ -199,12 +199,58 @@ export default class HTTP {
 
   /**
    * 生成一个URL
+   * @deprecated
    * @param baseURL 基URL
    * @param uri URI
    * @param query 查询参数
    * @returns string
    */
   static genURL(baseURL: string, uri: string | number | (string | number)[], query: Record<string, string | number> = {}): string {
+    uri = uri ?? [];
+    let queryString: string = "";
+
+    if (baseURL.includes("?")) {
+      const uris = baseURL.split("?");
+      uris[1].split("&").map(item => item.split("=")).forEach(item => {
+        if (!query[item[0]]) {
+          query[item[0]] = item[1];
+        }
+      });
+      baseURL = baseURL.substring(0, baseURL.lastIndexOf("?"));
+    }
+
+    let queryGroup: string[] = [];
+    for (const key in query) {
+      queryGroup.push(`${key}=${query[key]}`);
+    }
+    queryString = queryGroup.join("&");
+
+    if (baseURL[baseURL.length - 1] === "/") {
+      baseURL = baseURL.substring(0, baseURL.length - 1);
+    }
+    uri = Array.isArray(uri) ? uri : [uri];
+    uri = uri.map(item => {
+      item = item.toString();
+      if (item[0] === "/") {
+        item = item.substring(1, item.length);
+      }
+      if (item[item.length - 1] === "/") {
+        item = item.substring(0, item.length - 1);
+      }
+
+      return item;
+    });
+    uri = uri.filter(item => item.toString().trim());
+    return [baseURL, ...uri].join("/") + `?${queryString}`;
+  }
+  /**
+ * 生成请求URL
+ * @param baseURL 基URL
+ * @param uri URI
+ * @param query 查询参数
+ * @returns string
+ */
+  generateRequestURL(baseURL: string, uri: string | number | (string | number)[], query: Record<string, string | number> = {}): string {
     uri = uri ?? [];
     let queryString: string = "";
 
@@ -359,14 +405,12 @@ export default class HTTP {
       }
     }
 
-    const URL = HTTP.genURL(this.#baseURL, URIs, this.#query);
-
     if (method !== "GET") {
       options['body'] = this.#body as BodyInit;
     }
 
     return {
-      input: URL,
+      input: this.generateRequestURL(this.#baseURL, URIs, this.#query),
       init: options
     }
   }
