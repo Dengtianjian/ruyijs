@@ -1,7 +1,10 @@
-import { TBody, TMethods } from ".";
+import { TBody, THTTPMiddleware, TMethods } from ".";
 import RuyiRequest from "./RuyiRequest";
 
 export default class extends RuyiRequest {
+  constructor(prefix: string = null, baseURL: string = null, method: TMethods = "GET", query: Record<string, number | string | boolean> = {}, body: TBody = null, pipes: string[] = [], options: RequestInit = {}, headers: Record<string, string> = {}, globalMiddlewares: Array<THTTPMiddleware> = []) {
+    super(prefix, baseURL, method, query, body, pipes, options, headers, globalMiddlewares);
+  }
   send<ResponseData>(uri: string | number | (string | number)[] = null, method: TMethods = null): Promise<ResponseData> {
 
     let URIs = [];
@@ -22,6 +25,7 @@ export default class extends RuyiRequest {
     }
 
     this.query("uri", URIs ? URIs.join("/") : "/");
+    this.prefix(null);
 
     return super.send<ResponseData>(null, method);
   }
