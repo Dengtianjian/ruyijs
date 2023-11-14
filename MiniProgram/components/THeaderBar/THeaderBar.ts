@@ -8,6 +8,7 @@ const dis = EventBus.distribute("Ruyi_CustomNavbar");
 Component<{
   statusBarHeight: number
   navbarMarginTop: number
+  navbarHeight: number
   padding: number
   menuWidth: number
   styleString: string
@@ -118,6 +119,7 @@ Component<{
             height: res.height
           });
           this.triggerEvent("updateHeight", res.height);
+          this.triggerEvent("updateNavBarHeight", this.data.navbarHeight);
         }).exec();
       });
     },
@@ -182,6 +184,7 @@ Component<{
   data: {
     statusBarHeight: 0,
     navbarMarginTop: 0,
+    navbarHeight: 0,
     padding: 0,
     menuWidth: 0,
     styleString: "",
