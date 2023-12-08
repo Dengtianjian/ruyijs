@@ -110,19 +110,23 @@ Component<{
         isHomePage: HomePageRoute === CureentPageRoute
       });
 
+    },
+    ready() {
       wx.nextTick(() => {
         this.createSelectorQuery().select(".bar").boundingClientRect((res) => {
-          this.setData({
-            barHeight: res.height
-          });
-          dis.complete({
-            height: res.height
-          });
-          this.triggerEvent("updateHeight", res.height);
-          this.triggerEvent("updateNavBarHeight", this.data.navbarHeight);
+          if (res) {
+            this.setData({
+              barHeight: res.height
+            });
+            dis.complete({
+              height: res.height
+            });
+            this.triggerEvent("updateHeight", res.height);
+            this.triggerEvent("updateNavBarHeight", this.data.navbarHeight);
+          }
         }).exec();
       });
-    },
+    }
   },
   /**
    * 组件的属性列表
