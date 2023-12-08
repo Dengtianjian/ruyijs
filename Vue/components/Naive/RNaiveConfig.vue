@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { GlobalThemeOverrides } from 'naive-ui';
+import type { GlobalThemeOverrides } from 'naive-ui';
 
 withDefaults(defineProps<{
   themeOverrides?: GlobalThemeOverrides
