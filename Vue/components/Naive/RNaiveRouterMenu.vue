@@ -11,7 +11,7 @@ import naiveUI from '../../foundation/naiveUI';
 
 declare module 'vue-router' {
   interface RouteMeta {
-    menu: {
+    menu?: {
       index?: number,
       disabled?: boolean,
       extra?: string | (() => VNodeChild),
