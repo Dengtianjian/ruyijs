@@ -13,6 +13,10 @@
   background-color: var(--theme-background-color);
 }
 
+.t-alert_size-small {
+  padding: 20rpx;
+}
+
 .t-alert_border {
   border: 1px solid var(--theme-border-color);
 }
@@ -41,6 +45,10 @@
 .t-alert_content {
   font-size: 28rpx;
   color: #333639;
+}
+
+.t-alert_size-small .t-alert_content {
+  font-size: 24rpx;
 }
 
 .t-alert_close {
