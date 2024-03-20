@@ -1,5 +1,5 @@
 <!-- components/base/TAlert/TAlert.wxml -->
-<view class="t-alert {{ bordered?'t-alert_border':'' }} t-alert_{{ type }}" style="display:{{ show?'flex':'none' }};">
+<view class="t-alert {{ bordered?'t-alert_border':'' }} t-alert_{{ type }} t-alert_size-{{ size }}" style="display:{{ show?'flex':'none' }};">
   <view class="t-alert_icon {{ icon }}" wx:if="{{ showIcon }}">
     <slot name="icon" />
   </view>

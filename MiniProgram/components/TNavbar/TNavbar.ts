@@ -62,6 +62,9 @@ Component<{
   headerBarHeightUpdate: (event: {
     detail: number
   }) => void
+  headerNavBarHeightUpdate: (event: {
+    detail: number
+  }) => void
 }>({
   options: {
     addGlobalClass: true,
@@ -167,6 +170,12 @@ Component<{
         height: e.detail
       });
       this.triggerEvent("heightUpdate", e.detail);
+    },
+    headerNavBarHeightUpdate(e) {
+      this.setData({
+        navBarHeight: e.detail
+      });
+      this.triggerEvent("navBarHeightUpdate", e.detail);
     }
   }
 })

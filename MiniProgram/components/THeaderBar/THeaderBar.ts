@@ -8,6 +8,7 @@ const dis = EventBus.distribute("Ruyi_CustomNavbar");
 Component<{
   statusBarHeight: number
   navbarMarginTop: number
+  navbarHeight: number
   padding: number
   menuWidth: number
   styleString: string
@@ -109,18 +110,23 @@ Component<{
         isHomePage: HomePageRoute === CureentPageRoute
       });
 
+    },
+    ready() {
       wx.nextTick(() => {
         this.createSelectorQuery().select(".bar").boundingClientRect((res) => {
-          this.setData({
-            barHeight: res.height
-          });
-          dis.complete({
-            height: res.height
-          });
-          this.triggerEvent("updateHeight", res.height);
+          if (res) {
+            this.setData({
+              barHeight: res.height
+            });
+            dis.complete({
+              height: res.height
+            });
+            this.triggerEvent("updateHeight", res.height);
+            this.triggerEvent("updateNavBarHeight", this.data.navbarHeight);
+          }
         }).exec();
       });
-    },
+    }
   },
   /**
    * 组件的属性列表
@@ -182,6 +188,7 @@ Component<{
   data: {
     statusBarHeight: 0,
     navbarMarginTop: 0,
+    navbarHeight: 0,
     padding: 0,
     menuWidth: 0,
     styleString: "",

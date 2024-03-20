@@ -25,9 +25,13 @@
 
 .navbar-body {
   flex-shrink: 0;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* width: 230px; */
   font-size: 32rpx;
   text-overflow: ellipsis;
+  text-align: left;
   white-space: nowrap;
   overflow: hidden;
 }

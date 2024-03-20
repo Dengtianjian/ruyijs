@@ -40,6 +40,10 @@ Component<{}, {
   type: {
     type: StringConstructor,
     value: 'default' | 'info' | 'success' | 'warning' | 'error'
+  },
+  size: {
+    type: StringConstructor,
+    value: 'medium' | 'small' | 'mini'
   }
 }, {
   computeIcon: () => void,
@@ -84,6 +88,10 @@ Component<{}, {
     type: {
       type: String,
       value: "default"
+    },
+    size: {
+      type: String,
+      value: 'medium'
     }
   },
 
