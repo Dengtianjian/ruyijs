@@ -16,20 +16,52 @@ type TUploadResult = {
   accessURL: string,
 }
 
+export interface IDiscuzXFileUploadAuth {
+  'header-list': string
+  'key-time': string
+  'sign-algorithm': string
+  'sign-time': string
+  signature: string
+  'url-param-list': string
+}
+export interface IDiscuzXFileAuthData {
+  fileKey: string,
+  remoteFileKey: string,
+  auth: IDiscuzXFileUploadAuth,
+  authString: string,
+  previewURL: string,
+  accessControl: string,
+  httpMethod: 'post' | 'put'
+}
+
+export interface IDiscuzXFileInfo {
+  key: string,
+  name: string,
+  size: number,
+  width: number,
+  height: number,
+  url: string,
+  previewURL: string,
+  downloadURL: string,
+}
+
 export class DiscuzXFilesApi extends DiscuzXRequest {
-  uploadFile(file: File, body: Record<string, string> = {}, fileName: string = "file"): Promise<TUploadResult> {
-    return this.upload<TUploadResult>("files", file, fileName, body).then(res => {
-      res.link = `${this.requestURL}&uri=files/${res.fileId}`;
-      res.accessURL = `${this.requestURL}/${res.accessPath}`;
-      return res;
+  getUploadAuth(sourceFileName: string, filePath: string, size: number) {
+    return this.post<IDiscuzXFileAuthData>("auth/upload", {
+      sourceFileName,
+      filePath,
+      size
     });
   }
-  deleteFile(fileId: string) {
-    return this.delete(`files/${fileId}`);
+  getFileInfo(fileKey: string) {
+    return this.get<IDiscuzXFileInfo>(fileKey);
   }
-  genFileLink(fileId: string): string {
-    return `${this.requestURL}&uri=files/${fileId}.png`;
+  uploadFile(FileKey: string, file: File, body: Record<string, string> = {}, fileName: string = null) {
+    return this.upload<IDiscuzXFileInfo>(FileKey, file, fileName, body);
+  }
+  deleteFile(fileKey: string) {
+    return this.delete(fileKey);
   }
 }
 
-export default new DiscuzXFilesApi();
+export default new DiscuzXFilesApi('files');
