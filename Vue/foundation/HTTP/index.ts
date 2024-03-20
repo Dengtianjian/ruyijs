@@ -29,8 +29,10 @@ export interface IResponse<ResponseData, ResponseHeader = Record<string, string>
 
 export interface IPagination<Data> {
   pagination: {
+    items: number,
+    limit: number,
     page: number,
-    perPage: number,
+    skip: number,
     total: number
   }
   list: Data,
