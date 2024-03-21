@@ -1,6 +1,5 @@
 <template>
-  <n-upload list-type="image-card" :max="Max" :file-list="FileList" @change="uploadFile" @remove="removeFile"
-    v-bind="$attrs">
+  <n-upload :max="Max" :file-list="FileList" @change="uploadFile" @remove="removeFile" v-bind="$attrs">
     <slot />
   </n-upload>
 </template>
@@ -25,7 +24,7 @@ const Props = withDefaults(defineProps<{
   max: 1
 });
 
-const Max = ref<number>(1);
+const Max = ref<number>(Props.max);
 watch(() => Props.max, newV => {
   if (Props.single) {
     Max.value = 1;

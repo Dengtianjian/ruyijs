@@ -1,63 +1,23 @@
 import DiscuzXRequest from "../../../foundation/HTTP/discuzXRequest";
+import { IRuyiFileAuthData, IRuyiFileInfo } from "../../../types/common";
 
-type TUploadResult = {
-  accessPath: string,
-  extension: string,
-  fileId: string,
-  fullPath: string,
-  height: number,
-  path: string,
-  relativePath: string,
-  saveFileName: string,
-  size: number,
-  sourceFileName: string,
-  width: number,
-  link: string,
-  accessURL: string,
-}
-
-export interface IDiscuzXFileUploadAuth {
-  'header-list': string
-  'key-time': string
-  'sign-algorithm': string
-  'sign-time': string
-  signature: string
-  'url-param-list': string
-}
-export interface IDiscuzXFileAuthData {
-  fileKey: string,
-  remoteFileKey: string,
-  auth: IDiscuzXFileUploadAuth,
-  authString: string,
-  previewURL: string,
-  accessControl: string,
-  httpMethod: 'post' | 'put'
-}
-
-export interface IDiscuzXFileInfo {
-  key: string,
-  name: string,
-  size: number,
-  width: number,
-  height: number,
-  url: string,
-  previewURL: string,
-  downloadURL: string,
-}
-
+/**
+ * DiscuzX 文件接口
+ * @deprecated
+ */
 export class DiscuzXFilesApi extends DiscuzXRequest {
   getUploadAuth(sourceFileName: string, filePath: string, size: number) {
-    return this.post<IDiscuzXFileAuthData>("auth/upload", {
+    return this.post<IRuyiFileAuthData>("auth/upload", {
       sourceFileName,
       filePath,
       size
     });
   }
   getFileInfo(fileKey: string) {
-    return this.get<IDiscuzXFileInfo>(fileKey);
+    return this.get<IRuyiFileInfo>(fileKey);
   }
   uploadFile(FileKey: string, file: File, body: Record<string, string> = {}, fileName: string = null) {
-    return this.upload<IDiscuzXFileInfo>(FileKey, file, fileName, body);
+    return this.upload<IRuyiFileInfo>(FileKey, file, fileName, body);
   }
   deleteFile(fileKey: string) {
     return this.delete(fileKey);
