@@ -17,7 +17,7 @@ export class JSOSS<OSSClient> {
   /**
    * 对象授权信息
    */
-  protected ObjectAuthorization: Map<string, string> = new Map();
+  protected ObjectAuthorization: Map<string, string | Record<string, string>> = new Map();
   /**
    * 操作完成后需要移除授权信息的对象键名集
    */
@@ -36,10 +36,26 @@ export class JSOSS<OSSClient> {
    * @param objectKey string 对象键名
    * @param auth string 操作对象的授权信息
    * @param removeAfterUsing boolean 操作后移除对象授权信息
+   * @param httpMethod string  该授权信息适用于的请求方式
    * @returns this
    */
-  objectAuthorization(objectKey: string, auth: string, removeAfterUsing: boolean = true) {
-    this.ObjectAuthorization.set(objectKey, auth);
+  objectAuthorization(objectKey: string, auth: string, removeAfterUsing: boolean = true, httpMethod: string = null) {
+    if (httpMethod) {
+      httpMethod = httpMethod.toString().toLowerCase();
+
+      if (this.ObjectAuthorization.has(objectKey)) {
+        const HTTPMethodAuths = this.ObjectAuthorization.get(objectKey) as Record<string, string>;
+        HTTPMethodAuths[httpMethod] = auth;
+        this.ObjectAuthorization.set(objectKey, HTTPMethodAuths);
+      } else {
+        this.ObjectAuthorization.set(objectKey, {
+          [httpMethod]: auth
+        });
+      }
+    } else {
+      this.ObjectAuthorization.set(objectKey, auth);
+    }
+
     removeAfterUsing && this.RemoveAfterUsingObject.add(objectKey);
     return this;
   }
@@ -50,7 +66,7 @@ export class JSOSS<OSSClient> {
    * @param ACL string 对象访问控制
    * @returns Promise<string> 对象访问地址
    */
-  uploadFile(ObjectKey: string, UploadFile: File | Blob | String | ArrayBuffer,  ACL: string): Promise<string> {
+  uploadFile(ObjectKey: string, UploadFile: File | Blob | String | ArrayBuffer, ACL: string): Promise<string> {
     return Promise.resolve(null);
   }
   /**
