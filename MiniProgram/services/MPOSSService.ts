@@ -30,10 +30,11 @@ export class MPOSSService {
  * @param objectKey string 对象键名
  * @param auth string 操作对象的授权信息
  * @param disposable boolean 一次性的授权信息，操作完后废弃
+ * @param httpMethod string 该授权信息适用于的请求方法
  * @returns this
  */
-  auth(objectKey: string, auth: string, disposable: boolean = true) {
-    this.OSS.objectAuthorization(objectKey, auth, disposable);
+  auth(objectKey: string, auth: string, disposable: boolean = true, httpMethod: string = null) {
+    this.OSS.objectAuthorization(objectKey, auth, disposable, httpMethod);
     return this;
   }
   /**

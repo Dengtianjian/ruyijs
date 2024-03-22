@@ -12,7 +12,28 @@ export class MPQCloudCos extends MPOSS<ICOS> {
     this.OSSClient = new COS({
       SimpleUploadMethod: "putObject",
       getAuthorization: (options: TCosGetAuthorizationOptions, callback: TCosGetAuthorizationCallback) => {
-        callback(this.ObjectAuthorization.get(options.Key));
+        const Method: string = options.Method.toString().toLowerCase();
+
+        let objectKey: string = options.Key;
+        if (!objectKey) {
+          if (options.Query.prefix?.toString()) {
+            objectKey = options.Query.prefix.toString();
+          }
+        }
+        if (objectKey) {
+          const HTTPMethodAuths = this.ObjectAuthorization.get(objectKey);
+          if (typeof HTTPMethodAuths === 'string') {
+            callback(HTTPMethodAuths);
+          } else if (HTTPMethodAuths[Method]) {
+            callback(HTTPMethodAuths[Method]);
+          } else {
+            console.error(HTTPMethodAuths);
+            callback('');
+          }
+        } else {
+          console.error(options);
+          callback('');
+        }
       }
     });
   }
