@@ -36,6 +36,7 @@ export class MPOSS<OSSClient extends object = {}> {
    * @param objectKey string 对象键名
    * @param auth string 操作对象的授权信息
    * @param removeAfterUsing boolean 操作后移除对象授权信息
+   * @param httpMethod string 请求方式
    * @returns this
    */
   objectAuthorization(objectKey: string, auth: string, removeAfterUsing: boolean = true, httpMethod: string = null) {
