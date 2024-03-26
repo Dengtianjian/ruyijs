@@ -1,6 +1,6 @@
 const fileRender: FileReader = new FileReader();
 
-export function renderImage(file: File): Promise<string> {
+function renderImage(file: File): Promise<string> {
   fileRender.readAsDataURL(file);
   return new Promise((resolve) => {
     fileRender.onloadend = fr => {
@@ -8,4 +8,8 @@ export function renderImage(file: File): Promise<string> {
     }
   })
 
+}
+
+export default {
+  renderImage
 }

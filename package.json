@@ -6,5 +6,8 @@
     "publish": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "dayjs": "^1.11.10"
+  }
 }
