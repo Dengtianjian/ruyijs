@@ -12,8 +12,10 @@
       </view>
     </view>
     <view class="t-cell-content" bind:tap="tapContent">
-      <slot />
-      {{ content }}
+      <view >
+        <slot />
+        {{ content }}
+      </view>
       <text class="t-cell-content_icon antd antd-right" wx:if="{{ link }}"></text>
     </view>
   </view>
