@@ -7,6 +7,6 @@ export type TNaiveMenuRouteMetaMenuOption = {
   icon?: () => VNode,
   label?: string | (() => VNodeChild),
   show?: boolean,
-  type?: "group",
+  type?: "group" | "list",
   level?: number
 }
