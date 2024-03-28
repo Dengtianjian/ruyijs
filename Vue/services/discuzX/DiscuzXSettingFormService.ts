@@ -2,6 +2,9 @@ import { UnwrapNestedRefs, reactive, ref } from "vue"
 import { DiscuzXSettingsApi } from "../../api/discuzX/common/DiscuzXSettingsApi";
 import SettingFormService from "../SettingFormService";
 
+/**
+ * @deprecated
+ */
 export default class <T extends Record<string, any>> extends SettingFormService<T> {
   #apiInstance: DiscuzXSettingsApi = null;
   constructor(apiReuqestBaseURL: string, defaultValue: T) {
