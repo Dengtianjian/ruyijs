@@ -12,12 +12,16 @@ export default class <T extends object> {
   loading = ref<boolean>(false);
   saving = ref<boolean>(false);
   disabled = ref<boolean>(false);
-  // @ts-ignore
-  settings = reactive<T>({});
+  /**
+   * @deprecated
+   */
+  settings: UnwrapNestedRefs<T> = null;
+  value: UnwrapNestedRefs<T> = null;
   request: ISettingsApi = null;
   constructor(defaultValues: T, request: ISettingsApi) {
     if (defaultValues) {
       this.settings = reactive(defaultValues);
+      this.value = reactive(defaultValues);
     }
 
     this.request = request;
@@ -29,8 +33,10 @@ export default class <T extends object> {
       for (const key in settings) {
         // @ts-ignore
         this.settings[key] = settings[key];
+        // @ts-ignore
+        this.value[key] = settings[key];
       }
-      return settings;
+      return this.value;
     }).finally(() => {
       this.loading.value = false;
     });
@@ -38,7 +44,7 @@ export default class <T extends object> {
   save(dataHandle?: (data?: UnwrapNestedRefs<T>) => T) {
     this.saving.value = true;
     this.disabled.value = true;
-    return this.request.saveItems(dataHandle ? dataHandle(toRaw(this.settings)) : this.settings).finally(() => {
+    return this.request.saveItems(dataHandle ? dataHandle(toRaw(this.value)) : this.value).finally(() => {
       this.saving.value = false;
       this.disabled.value = false;
     });
