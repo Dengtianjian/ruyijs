@@ -35,7 +35,7 @@ export default class <T extends object> {
       this.loading.value = false;
     });
   }
-  save(dataHandle: (data?: UnwrapNestedRefs<T>) => T) {
+  save(dataHandle?: (data?: UnwrapNestedRefs<T>) => T) {
     this.saving.value = true;
     this.disabled.value = true;
     return this.request.saveItems(dataHandle ? dataHandle(toRaw(this.settings)) : this.settings).finally(() => {
