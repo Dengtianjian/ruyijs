@@ -1,5 +1,4 @@
-export type TCosHeaders = Record<string, string | number>;
-export type TCosQuery = Record<string, string | number>;
+import { TOSSHeaders, TOSSQuery } from "./MPOSSTypes"
 
 export type TCosProgressParam = {
   progressData: {
@@ -13,11 +12,11 @@ export type TCosProgressParam = {
 export type TCosGetAuthorizationOptions = {
   Bucket: string,
   ForceSignHost: boolean,
-  Headers: TCosHeaders,
+  Headers: TOSSHeaders,
   Key: string,
   Method: string,
   Pathname: string
-  Query: Record<string, string | number>,
+  Query: TOSSQuery,
   Region: string,
   Scope: Array<{
     action: string,
@@ -78,7 +77,7 @@ export interface ICOS {
       TaskId: string,
       tracker: unknown
     }) => void,
-    Headers?: TCosHeaders
+    Headers?: TOSSHeaders
   }, callback: TFunctionCallback<TCosFinishedData>) => void,
   getObjectUrl: (option: {
     Bucket: string,
@@ -88,8 +87,8 @@ export interface ICOS {
     Protocal?: string,
     Domain?: string,
     Method?: string,
-    Query?: TCosHeaders,
-    Headers?: TCosHeaders,
+    Query?: TOSSQuery,
+    Headers?: TOSSHeaders,
     Expires?: number
   }, callback: TFunctionCallback<{
     Url: string

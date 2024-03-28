@@ -60,14 +60,18 @@ export function generateRouterMenuOptions(Routes: RouteRecordRaw[], level: numbe
           if (RouteItem.meta.menu.icon !== undefined) {
             Options['icon'] = RouteItem.meta.menu.icon;
           }
-          if (RouteItem.meta.menu.type !== undefined) {
-            Options['type'] = RouteItem.meta.menu.type;
+          if (RouteItem.meta.menu.type) {
+            Options['label'] = RouteItem.meta.menu.label?.toString() ?? RouteItem.meta.title;
             if (RouteItem.meta.menu.type === "group") {
-              Options['label'] = RouteItem.meta.menu.label?.toString() ?? RouteItem.meta.title;
+              Options['type'] = RouteItem.meta.menu.type;
               if (RouteItem.children) {
                 Options['children'] = generateRouterMenuOptions(RouteItem.children);
               } else {
                 Options['children'] = [];
+              }
+            } else if (RouteItem.meta.menu.type === "list") {
+              if (RouteItem.children) {
+                Options['children'] = generateRouterMenuOptions(RouteItem.children);
               }
             }
           } else {
@@ -85,7 +89,7 @@ export function generateRouterMenuOptions(Routes: RouteRecordRaw[], level: numbe
         }
       }
     }
-    if (RouteItem.children && RouteItem.meta?.menu?.type !== 'group') {
+    if (RouteItem.children && !RouteItem.meta?.menu?.type) {
       MenuRoutes.push(...generateRouterMenuOptions(RouteItem.children, level));
     }
   });

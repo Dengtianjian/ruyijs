@@ -1,5 +1,9 @@
 import DiscuzXRequest from "../../../foundation/HTTP/discuzXRequest";
 
+/**
+ * DiscuzX 附件接口
+ * @deprecated
+ */
 export class DiscuzXAttachmentsApi extends DiscuzXRequest {
   uploadAttachment(file: File): Promise<string> {
     return this.upload("attachments", file);

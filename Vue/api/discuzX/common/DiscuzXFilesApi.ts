@@ -1,35 +1,27 @@
 import DiscuzXRequest from "../../../foundation/HTTP/discuzXRequest";
+import { IRuyiFileAuthData, IRuyiFileInfo } from "../../../types/common";
 
-type TUploadResult = {
-  accessPath: string,
-  extension: string,
-  fileId: string,
-  fullPath: string,
-  height: number,
-  path: string,
-  relativePath: string,
-  saveFileName: string,
-  size: number,
-  sourceFileName: string,
-  width: number,
-  link: string,
-  accessURL: string,
-}
-
+/**
+ * DiscuzX 文件接口
+ * @deprecated
+ */
 export class DiscuzXFilesApi extends DiscuzXRequest {
-  uploadFile(file: File, body: Record<string, string> = {}, fileName: string = "file"): Promise<TUploadResult> {
-    return this.upload<TUploadResult>("files", file, fileName, body).then(res => {
-      res.link = `${this.requestURL}&uri=files/${res.fileId}`;
-      res.accessURL = `${this.requestURL}/${res.accessPath}`;
-      return res;
+  getUploadAuth(sourceFileName: string, filePath: string, size: number) {
+    return this.post<IRuyiFileAuthData>("auth/upload", {
+      sourceFileName,
+      filePath,
+      size
     });
   }
-  deleteFile(fileId: string) {
-    return this.delete(`files/${fileId}`);
+  getFileInfo(fileKey: string) {
+    return this.get<IRuyiFileInfo>(fileKey);
   }
-  genFileLink(fileId: string): string {
-    return `${this.requestURL}&uri=files/${fileId}.png`;
+  uploadFile(FileKey: string, file: File, body: Record<string, string> = {}, fileName: string = null) {
+    return this.upload<IRuyiFileInfo>(FileKey, file, fileName, body);
+  }
+  deleteFile(fileKey: string) {
+    return this.delete(fileKey);
   }
 }
 
-export default new DiscuzXFilesApi();
+export default new DiscuzXFilesApi('files');

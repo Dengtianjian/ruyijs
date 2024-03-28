@@ -9,11 +9,14 @@
 </template>
 
 <script lang="ts" setup>
-import type { GlobalThemeOverrides } from 'naive-ui';
+import type { GlobalThemeOverrides} from 'naive-ui';
+import { NConfigProvider, NDialogProvider, NMessageProvider } from "naive-ui";
 
 withDefaults(defineProps<{
   themeOverrides?: GlobalThemeOverrides
-}>(), {})
+}>(), {
+  themeOverrides: {}
+})
 
 </script>
 
