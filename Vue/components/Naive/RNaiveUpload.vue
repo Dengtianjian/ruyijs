@@ -1,5 +1,5 @@
 <template>
-  <n-upload :max="Max" :file-list="FileList" @change="uploadFile" @remove="removeFile" v-bind="$attrs">
+  <n-upload :list-type="listType" :max="Max" :file-list="FileList" @change="uploadFile" @remove="removeFile" v-bind="$attrs">
     <slot />
   </n-upload>
 </template>
@@ -15,13 +15,15 @@ const Props = withDefaults(defineProps<{
   file?: UploadFileInfo,
   single?: boolean,
   uploadFile: (file: UploadFileInfo) => Promise<string | UploadFileInfo>
-  removeFile: (file: UploadFileInfo) => Promise<boolean>,
+  removeFile?: (file: UploadFileInfo) => Promise<boolean>,
   max?: number
+  listType?: "text" | "image" | "image-card"
 }>(), {
   files: null,
   file: null,
   single: false,
-  max: 1
+  max: 1,
+  listType: "text"
 });
 
 const Max = ref<number>(Props.max);

@@ -36,9 +36,12 @@
 }
 
 .t-cell-content {
+  display: flex;
+  align-items: center;
+  column-gap: 8rpx;
   color: #969799;
-  font-size: 28rpx;
-  line-height: 1.4;
+  font-size: 26rpx;
+  line-height: normal;
 }
 
 .t-cell-content_icon {

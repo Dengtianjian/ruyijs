@@ -105,12 +105,15 @@ export default class Request extends HTTP {
  * @param request 请求方法
  * @param breakCallback 每次请求完后都会执行一次，如果返回 true 就会结束轮询。有两种情况会结束轮询，要么接口报错，要么该方法返回了 true
  * @param waitDuraion 每次轮询等待时长，秒级
+ * @param stopRequest 停止轮询请求，该参数需要传入一个 Ref 引用变量，外部可通过该变量手动控制是否继续请求
  * @returns 响应结果
  */
-  polling<ResponseData>(request: () => Promise<ResponseData>, breakCallback: (res: ResponseData) => boolean, waitDuraion: number = 2): Promise<ResponseData> {
+  polling<ResponseData>(request: () => Promise<ResponseData>, breakCallback: (res: ResponseData) => boolean, waitDuraion: number = 2, stopRequest: Ref<boolean> = ref(false)): Promise<ResponseData> {
     let breakWhile: boolean = false;
     return new Promise(async (resolve, reject) => {
       while (breakWhile === false) {
+        if (stopRequest.value) break;
+
         await new Promise<ResponseData>((resolve, reject) => {
           setTimeout(async () => {
             await request().then(res => {
