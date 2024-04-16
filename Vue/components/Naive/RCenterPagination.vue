@@ -11,6 +11,5 @@
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
 }
 </style>
