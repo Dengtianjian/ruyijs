@@ -1,10 +1,13 @@
 <template>
   <n-layout has-sider style="background-color:transparent;">
-    <n-layout-sider style="min-height:calc(100vh - 60px);">
+    <n-layout-sider :width="siderWidth" style="min-height:calc(100vh - 60px);">
       <RRouterMenu :options="menuOptions"></RRouterMenu>
     </n-layout-sider>
     <n-layout-content style="background-color:transparent;">
-      <RPanel style="margin:20px;">
+      <RPanel :style="{
+        margin: '20px auto',
+        width: contentWidth
+      }">
         <KeepAliveRouterView />
       </RPanel>
       <CommonFooter />
@@ -20,9 +23,14 @@ import KeepAliveRouterView from '../RKeepAliveRouterView.vue';
 import RRouterMenu from '../RRouterMenu.vue';
 import RPanel from '../RPanel.vue';
 
-defineProps<{
-  menuOptions: Array<RTMenuOption>
-}>();
+withDefaults(defineProps<{
+  menuOptions: Array<RTMenuOption>,
+  siderWidth?: string | number,
+  contentWidth?: string | number
+}>(), {
+  siderWidth: 272,
+  contentWidth: 'auto'
+});
 </script>
 
 <style scoped></style>
