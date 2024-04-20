@@ -88,7 +88,14 @@ function uploadFile({ file }: { file: UploadFileInfo, fileList: Array<UploadFile
 }
 
 function removeFile({ file }: { file: UploadFileInfo }) {
-  return Props.removeFile(file).then(_ => {
+
+  return new Promise((resolve, reject) => {
+    if (Props.removeFile) {
+      Props.removeFile(file).then(resolve).catch(reject);
+    } else {
+      resolve(true);
+    }
+  }).then(() => {
     FileList.splice(FileList.findIndex(item => {
       return item.id === file.id;
     }), 1);
@@ -97,7 +104,6 @@ function removeFile({ file }: { file: UploadFileInfo }) {
     } else {
       Emits("update:files", FileList);
     }
-    return true;
   }).catch(err => {
     if (err.statusCode === 404) {
       FileList.splice(FileList.findIndex(item => {
