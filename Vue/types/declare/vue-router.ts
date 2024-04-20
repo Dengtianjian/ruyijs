@@ -1,12 +1,6 @@
-import { VNode, VNodeChild } from 'vue';
+import { RouteRecordRaw } from 'vue-router';
 
-export type TNaiveMenuRouteMetaMenuOption = {
-  index?: number,
-  disabled?: boolean,
-  extra?: string | (() => VNodeChild),
-  icon?: () => VNode,
-  label?: string | (() => VNodeChild),
-  show?: boolean,
-  type?: "group" | "list",
-  level?: number
-}
+export type TRuyiRouteRecordRaw<Meta extends Object = {}> = RouteRecordRaw & {
+  meta?: Meta,
+  children?: TRuyiRouteRecordRaw<Meta>[]
+};

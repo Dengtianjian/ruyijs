@@ -1,9 +1,22 @@
-import { AllowedComponentProps, ComponentCustomProps, VNodeProps, VNode, RendererNode, RendererElement, VNodeChild } from "vue";
-import { RouterLinkProps, RouteRecordRaw, RouteRecordName } from "vue-router";
+import { RouteRecordName } from "vue-router";
 import NaiveUI from "../foundation/naiveUI";
 import { RTMenuOption } from "../types/components/Common";
+import { TRuyiRouteRecordRaw } from "../types/declare/vue-router";
+import { VNodeChild } from "vue";
 
-function getChildrenRouteNames(Routes: RouteRecordRaw[]): string[] {
+export type TRuyiRouteMetaNaiveUIMenu<T extends Object = {}> = {
+  index?: number,
+  disabled?: boolean,
+  extra?: string | (() => VNodeChild),
+  icon?: () => VNode,
+  title?: string,
+  label?: string | (() => VNodeChild),
+  show?: boolean,
+  type?: "group" | 'list',
+  level?: number
+} & T;
+
+function getChildrenRouteNames(Routes: TRuyiRouteRecordRaw[]): string[] {
   const Names: string[] = [];
 
   Routes.forEach(RouteItem => {
@@ -15,8 +28,8 @@ function getChildrenRouteNames(Routes: RouteRecordRaw[]): string[] {
 
   return Names;
 }
-function getRoute(Routes: RouteRecordRaw[], name: RouteRecordName): RouteRecordRaw[] {
-  let routes: RouteRecordRaw[] = [];
+function getRoute(Routes: TRuyiRouteRecordRaw[], name: RouteRecordName): TRuyiRouteRecordRaw[] {
+  let routes: TRuyiRouteRecordRaw[] = [];
 
   for (let index = 0; index < Routes.length; index++) {
     const Route = Routes[index];
@@ -31,13 +44,15 @@ function getRoute(Routes: RouteRecordRaw[], name: RouteRecordName): RouteRecordR
 
   return routes;
 }
-export function generateRouterMenuOptions(Routes: RouteRecordRaw[], level: number | number[] | boolean = false, RouteName: string = null): Array<RTMenuOption> {
+export function generateRouterMenuOptions<RouteMeta extends Object = {
+  title?: string
+}>(Routes: TRuyiRouteRecordRaw<RouteMeta>[], level: number | number[] | boolean = false, RouteName: string = null): Array<RTMenuOption<RouteMeta>> {
   if (RouteName) {
-    Routes = getRoute(Routes, RouteName);
+    Routes = getRoute(Routes, RouteName) as TRuyiRouteRecordRaw<RouteMeta>[];
     if (!Routes) return [];
   }
 
-  const MenuRoutes: Array<RTMenuOption> = [];
+  const MenuRoutes: Array<RTMenuOption<RouteMeta>> = [];
   Routes.forEach(RouteItem => {
     if (level === false || level && RouteItem.meta?.menu?.level) {
       if (level === false || (Array.isArray(level) && level.includes(RouteItem.meta.menu.level)) || level === RouteItem.meta.menu.level) {
@@ -46,6 +61,7 @@ export function generateRouterMenuOptions(Routes: RouteRecordRaw[], level: numbe
             key: RouteItem.name.toString(),
             childrenNames: getChildrenRouteNames(RouteItem.children ?? []),
             index: RouteItem.meta.menu?.index ?? MenuRoutes.length + 1,
+            meta: RouteItem.meta
           }
 
           if (RouteItem.meta.menu.disabled !== undefined) {
@@ -75,6 +91,7 @@ export function generateRouterMenuOptions(Routes: RouteRecordRaw[], level: numbe
               }
             }
           } else {
+            // @ts-ignore
             Options['label'] = NaiveUI.createdRouterLinkLabel(RouteItem.meta.menu.label?.toString() ?? RouteItem.meta.title, {
               to: {
                 name: RouteItem.name
