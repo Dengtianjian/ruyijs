@@ -37,7 +37,10 @@ function getActiveMenuName(menuOptions: RTMenuOption[], CurrentRoute: RouteLocat
     }
   }
 
-  ExpandedKeys.value.push(hitMenu.key);
+  ExpandedKeys.value = [];
+  if (hitMenu) {
+    ExpandedKeys.value.push(hitMenu.key);
+  }
   DefaultSelectedMenu.value = hitMenu ? hitMenu.key.toString() : CurrentRoute.name.toString();
 }
 
