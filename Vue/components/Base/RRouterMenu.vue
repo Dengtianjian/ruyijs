@@ -1,5 +1,6 @@
 <template>
-  <n-menu :options="menuOptions" v-model:value="DefaultSelectedMenu" v-bind="$attrs" />
+  <n-menu :options="menuOptions" v-model:value="DefaultSelectedMenu" v-bind="$attrs"
+    :default-expanded-keys="ExpandedKeys" />
 </template>
 
 <script lang="ts" setup>
@@ -18,6 +19,8 @@ const Props = defineProps({
 const Router = useRouter();
 const Route = useRoute();
 
+const ExpandedKeys = ref<string[]>([]);
+
 const DefaultSelectedMenu = ref<string>(Route.name.toString());
 Router.beforeResolve((to, from, next) => {
   getActiveMenuName(menuOptions.value, to);
@@ -34,6 +37,10 @@ function getActiveMenuName(menuOptions: RTMenuOption[], CurrentRoute: RouteLocat
     }
   }
 
+  ExpandedKeys.value = [];
+  if (hitMenu) {
+    ExpandedKeys.value.push(hitMenu.key);
+  }
   DefaultSelectedMenu.value = hitMenu ? hitMenu.key.toString() : CurrentRoute.name.toString();
 }
 
