@@ -10,6 +10,7 @@
       }" v-if="!$slots.default">
         <KeepAliveRouterView />
       </RPanel>
+      <slot />
       <CommonFooter />
     </n-layout-content>
   </n-layout>
