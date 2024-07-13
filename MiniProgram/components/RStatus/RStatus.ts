@@ -7,7 +7,7 @@ Component({
   properties: {
     defaultText: {
       type: String,
-      value: "下载加载更多",
+      value: "下拉加载更多",
     },
     loading: {
       type: Boolean,

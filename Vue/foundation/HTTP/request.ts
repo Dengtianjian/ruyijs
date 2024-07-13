@@ -112,7 +112,10 @@ export default class Request extends HTTP {
     let breakWhile: boolean = false;
     return new Promise(async (resolve, reject) => {
       while (breakWhile === false) {
-        if (stopRequest.value) break;
+        if (stopRequest.value) {
+          stopRequest.value = false;
+          break;
+        }
 
         await new Promise<ResponseData>((resolve, reject) => {
           setTimeout(async () => {
