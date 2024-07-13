@@ -7,9 +7,10 @@
       <RPanel :style="{
         margin: '20px auto',
         width: contentWidth
-      }">
+      }" v-if="!$slots.default">
         <KeepAliveRouterView />
       </RPanel>
+      <slot />
       <CommonFooter />
     </n-layout-content>
   </n-layout>

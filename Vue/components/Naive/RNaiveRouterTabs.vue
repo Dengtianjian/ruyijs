@@ -6,6 +6,8 @@
 
 <script lang="ts" setup>
 import { useRoute, useRouter } from "vue-router";
+import { MenuOption } from "naive-ui";
+import { ref } from "vue";
 
 const Route = useRoute();
 const Router = useRouter();
