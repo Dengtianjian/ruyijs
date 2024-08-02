@@ -16,15 +16,15 @@
 
 <script lang="ts" setup>
 const Props = withDefaults(defineProps<{
-  defaultText: string,
-  loading: boolean,
-  loadingText: string,
-  loadingIcon: boolean,
-  iconColor: string,
-  iconActiveColor: string,
-  fontSize: string,
-  finished: boolean,
-  finishedText: string
+  defaultText?: string,
+  loading?: boolean,
+  loadingText?: string,
+  loadingIcon?: boolean,
+  iconColor?: string,
+  iconActiveColor?: string,
+  fontSize?: string,
+  finished?: boolean,
+  finishedText?: string
 }>(), {
   defaultText: "下拉加载更多",
   loading: false,
