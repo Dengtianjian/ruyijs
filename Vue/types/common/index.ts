@@ -4,6 +4,7 @@ export interface IRuyiFileInfo {
   id?: number,
   key: string,
   remote: boolean,
+  platform: string,
   belongsId: string,
   belongsType: string,
   ownerId: number,
@@ -20,8 +21,8 @@ export interface IRuyiFileInfo {
 
   previewURL?: string,
   downloadURL?: string,
-  remotePreviewURL?: string,
-  downloadDownloadURL?: string
+  transferPreviewURL?: string,
+  transferDownloadURL?: string
 }
 
 export interface IRuyiFileUploadAuth {

@@ -1,5 +1,6 @@
 <template>
-  <n-upload :list-type="listType" :max="Max" :file-list="FileList" @change="uploadFile" @remove="removeFile" v-bind="$attrs">
+  <n-upload :list-type="listType" :max="Max" :file-list="FileList" @change="uploadFile" @remove="removeFile"
+    v-bind="$attrs">
     <slot />
   </n-upload>
 </template>
@@ -17,13 +18,15 @@ const Props = withDefaults(defineProps<{
   uploadFile: (file: UploadFileInfo) => Promise<string | UploadFileInfo>
   removeFile?: (file: UploadFileInfo) => Promise<boolean>,
   max?: number
-  listType?: "text" | "image" | "image-card"
+  listType?: "text" | "image" | "image-card",
+  onlyUpload?: boolean
 }>(), {
   files: null,
   file: null,
   single: false,
   max: 1,
-  listType: "text"
+  listType: "text",
+  onlyUpload: true
 });
 
 const Max = ref<number>(Props.max);
@@ -43,10 +46,12 @@ watch(() => Props.single, newV => {
 });
 
 const FileList = reactive([]);
-if (Props.files) {
-  FileList.push(...Props.files);
-} else if (Props.file) {
-  FileList.push(Props.file);
+if (!Props.onlyUpload && Props.single) {
+  if (Props.files) {
+    FileList.push(...Props.files);
+  } else if (Props.file) {
+    FileList.push(Props.file);
+  }
 }
 
 const Emits = defineEmits(["update:file", "update:files"]);
@@ -56,13 +61,22 @@ function uploadFile({ file }: { file: UploadFileInfo, fileList: Array<UploadFile
     Props.uploadFile(file).then(res => {
       if (typeof res === "string") {
         if (Props.single === true || Props.single === undefined) {
-          FileList.splice(0, 1, {
-            id: file.id,
-            name: file.name,
-            status: "finished",
-            url: res
-          });
-          Emits("update:file", FileList[0]);
+          if (Props.onlyUpload) {
+            Emits("update:file", {
+              id: file.id,
+              name: file.name,
+              status: "finished",
+              url: res
+            });
+          } else {
+            FileList.splice(0, 1, {
+              id: file.id,
+              name: file.name,
+              status: "finished",
+              url: res
+            });
+            Emits("update:file", FileList[0]);
+          }
         } else {
           FileList.push({
             id: file.id,
@@ -74,10 +88,9 @@ function uploadFile({ file }: { file: UploadFileInfo, fileList: Array<UploadFile
         }
       } else {
         if (Props.single === true || Props.single === undefined) {
-          FileList.splice(0, 1, res);
+          !Props.onlyUpload && FileList.splice(0, 1, res);
           Emits("update:file", res);
         } else {
-          FileList.push(res);
           Emits("update:files", FileList);
         }
       }
