@@ -19,14 +19,16 @@ const Props = withDefaults(defineProps<{
   removeFile?: (file: UploadFileInfo) => Promise<boolean>,
   max?: number
   listType?: "text" | "image" | "image-card",
-  onlyUpload?: boolean
+  onlyUpload?: boolean,
+  sizeLimit?: number
 }>(), {
   files: null,
   file: null,
   single: false,
   max: 1,
   listType: "text",
-  onlyUpload: true
+  onlyUpload: true,
+  sizeLimit: null
 });
 
 const Max = ref<number>(Props.max);
@@ -58,6 +60,10 @@ const Emits = defineEmits(["update:file", "update:files"]);
 
 function uploadFile({ file }: { file: UploadFileInfo, fileList: Array<UploadFileInfo>, event?: Event }) {
   if (file.file) {
+    if (Props.sizeLimit && file.file.size > Props.sizeLimit) {
+      return NMessage.warning(`请上传不超过 ${Math.round(Props.sizeLimit / 1024 / 1024)} MB的文件`);
+    }
+
     Props.uploadFile(file).then(res => {
       if (typeof res === "string") {
         if (Props.single === true || Props.single === undefined) {
