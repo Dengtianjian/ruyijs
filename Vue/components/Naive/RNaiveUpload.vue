@@ -48,7 +48,7 @@ watch(() => Props.single, newV => {
 });
 
 const FileList = reactive([]);
-if (!Props.onlyUpload && Props.single) {
+if (!Props.onlyUpload) {
   if (Props.files) {
     FileList.push(...Props.files);
   } else if (Props.file) {
