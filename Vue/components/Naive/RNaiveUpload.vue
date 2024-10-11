@@ -27,7 +27,7 @@ const Props = withDefaults(defineProps<{
   single: false,
   max: 1,
   listType: "text",
-  onlyUpload: true,
+  onlyUpload: false,
   sizeLimit: null
 });
 
