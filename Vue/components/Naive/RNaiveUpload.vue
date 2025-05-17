@@ -27,6 +27,7 @@ const Props = withDefaults(
     max?: number;
     listType?: "text" | "image" | "image-card";
     onlyUpload?: boolean;
+    sizeLimit?: number;
   }>(),
   {
     files: null,
@@ -34,7 +35,8 @@ const Props = withDefaults(
     single: false,
     max: 1,
     listType: "text",
-    onlyUpload: true,
+    onlyUpload: false,
+    sizeLimit: null,
   }
 );
 
@@ -61,7 +63,7 @@ watch(
 );
 
 const FileList = reactive([]);
-if (!Props.onlyUpload && Props.single) {
+if (!Props.onlyUpload) {
   if (Props.files) {
     FileList.push(...Props.files);
   } else if (Props.file) {
@@ -79,6 +81,12 @@ function uploadFile({
   event?: Event;
 }) {
   if (file.file) {
+    if (Props.sizeLimit && file.file.size > Props.sizeLimit) {
+      return NMessage.warning(
+        `请上传不超过 ${Math.round(Props.sizeLimit / 1024 / 1024)} MB的文件`
+      );
+    }
+
     Props.uploadFile(file)
       .then((res) => {
         if (typeof res === "string") {
@@ -108,7 +116,6 @@ function uploadFile({
                 url: res,
               });
             }
-
             Emits("update:files", FileList);
           }
         } else {
@@ -122,11 +129,12 @@ function uploadFile({
             Emits("update:files", FileList);
           }
         }
-        console.log(FileList);
       })
       .catch((err) => {
         NMessage.error(err.message ?? "上传失败，请稍后重试");
       });
+  } else {
+    NMessage.warning("请选择上传的文件");
   }
 }
 
